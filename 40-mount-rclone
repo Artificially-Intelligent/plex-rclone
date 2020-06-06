@@ -20,19 +20,19 @@ if [ -z "${RCLONE_CONFIG}" ]; then
 	echo "note: RCLONE_CONFIG env variable not defined. Assigning default path: $RCLONE_CONFIG"
 fi
 
-if [ -f "${RCLONE_CONFIG}" ]; then
-	echo "warning: Rclone config file $RCLONE_CONFIG doesn't exist. Mount a volume containing one and/or setup your own by running the command below (replacing plex-rclone with your container name if different)"
-	echo "			docker exec -it plex-rclone rclone config --config $RCLONE_CONFIG"
-	echo "			Create a 'new remote' named $RCLONE_MOUNT_REMOTE_PATH  (without the : and any text following it), or add the name you chose followed by : to enviroment variable RCLONE_MOUNT_REMOTE_PATH"
+if [ ! -f "${RCLONE_CONFIG}" ]; then
+	echo "warning: Rclone config file $RCLONE_CONFIG doesn't exist. Mount a volume containing one and/or setup your own by running the command below (replacing plex-rclone with your container name if different) ' docker exec -it plex-rclone rclone config --config $RCLONE_CONFIG ' Create a 'new remote' named $RCLONE_MOUNT_REMOTE_PATH  (without the : and any text following it), or add the name you chose followed by : to enviroment variable RCLONE_MOUNT_REMOTE_PATH"
 fi
 
-mkdir -p "$RCLONE_MOUNT";
+mkdir -p "$RCLONE_MOUNT_CONTAINER_PATH";
 chown -R abc:abc $RCLONE_MOUNT_CONTAINER_PATH;
 
 # start rclone
-if [ ! -z "${RCLONE_ARGUMENTS}" ]; then
-	echo "Starting rclone: rclone --config $RCLONE_CONFIG $RCLONE_ARGUMENTS"
-	rclone mount $RCLONE_MOUNT_REMOTE_PATH $RCLONE_MOUNT_CONTAINER_PATH --config $RCLONE_CONFIG $RCLONE_MOUNT_OPTIONS &
-else
-	echo "No RCLONE_ARGUMENTS env variable set. Skipping rclone start-up"
+if [ -z "${RCLONE_COMMAND}" ]; then
+	RCLONE_COMMAND="mount $RCLONE_MOUNT_REMOTE_PATH $RCLONE_MOUNT_CONTAINER_PATH --config $RCLONE_CONFIG $RCLONE_MOUNT_OPTIONS"
 fi
+
+# start rclone
+echo "Starting rclone: rclone $RCLONE_COMMAND"
+rclone $RCLONE_COMMAND &
+
