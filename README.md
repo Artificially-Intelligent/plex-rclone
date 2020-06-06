@@ -70,6 +70,7 @@
 <pre><code>docker create \
   --name=plex \
   --net=host \
+  --cap-add SYS_ADMIN --device /dev/fuse
   -e PUID=1000 \
   -e PGID=1000 \
   -e VERSION=docker \
@@ -95,6 +96,10 @@ services:
     image: artificiallyintelligent/plex-rclone
     container_name: plex
     network_mode: host
+    devices:
+      - "/dev/fuse:/dev/fuse"
+    cap_add:
+      - SYS_ADMIN
     environment:
       - PUID=1000
       - PGID=1000
@@ -172,8 +177,11 @@ services:
 </thead>
 <tbody>
 <tr>
-<td align="center"><code>--net=host</code></td>
-<td>Use Host Networking</td>
+<td align="center"><code>--cap-add SYS_ADMIN --device /dev/fuse</code></td>
+<td>Reenables all system capabilityies usually removed from docker containers, required for rclone mount to function. <a>https://opensource.com/business/14/9/security-for-docker</a> <a> https://lwn.net/Articles/486306/</a></td>
+</tr>
+<td align="center"><code>--device /dev/fuse</code></td>
+<td>Required for rclone mount to function. </td>
 </tr>
 <tr>
 <td align="center"><code>-e RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone</code></td>
@@ -190,6 +198,10 @@ services:
 <tr>
 <td align="center"><code>-e RCLONE_CONFIG=/config/rclone/rclone.conf</code></td>
 <td>specify the path to rclone.conf</td>
+</tr>
+<tr>
+<td align="center"><code>-e RCLONE_COMMAND=" mount REMOTE: /mnt/rclone --config /config/rclone/rclone.conf --read-only --allow-other --acd-templink-threshold 0 --stats 1s --buffer-size 1G --timeout 5s --contimeout 5s "</code></td>
+<td>Value is passed as a string of arguments to rclone. ie. <code> rclone $RCLONE_COMMAND & </code> If defined it superceeds all configurations specidifed in RCLONE_MOUNT_CONTAINER_PATH, RCLONE_MOUNT_REMOTE_PATH, RCLONE_MOUNT_OPTIONS and RCLONE_CONFIG. For config options see <a>https://rclone.org/commands/rclone_mount/</a></td>
 </tr>
 <tr>
 <td align="center"><code>-v /config/rclone</code></td>
