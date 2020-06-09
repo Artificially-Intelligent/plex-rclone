@@ -1,0 +1,26 @@
+version: "2.1"
+services:
+  plex:
+    image: artificiallyintelligent/plex-rclone
+    container_name: plex
+    network_mode: host
+    devices:
+      - "/dev/fuse:/dev/fuse"
+    cap_add:
+      - SYS_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - VERSION=docker
+      - UMASK_SET=022 #optional
+      - PLEX_CLAIM= #optional
+      - RCLONE_CONFIG=/config/rclone/rclone.conf
+      - RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone
+      - RCLONE_MOUNT_REMOTE_PATH="REMOTE:"
+      - RCLONE_MOUNT_OPTIONS=" --read-only --allow-other --acd-templink-threshold 0 --stats 1s --buffer-size 1G --timeout 5s --contimeout 5s "
+    volumes:
+      - /path/to/library:/config
+      - /path/to/tvseries:/tv
+      - /path/to/movies:/movies
+      - /path/to/config/rclone:/config/rclone/
+    restart: unless-stopped

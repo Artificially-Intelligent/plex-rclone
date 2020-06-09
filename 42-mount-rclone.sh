@@ -20,6 +20,22 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
 	fi
 
+	if ! [ -z "$RCLONE_CONFIG_URL" ] ; then
+        echo "RCLONE_CONFIG_URL defined. Attempting to download latest config file"
+        curl -L -o ./rclone.conf $RCLONE_CONFIG_URL 
+        # /usr/bin/gdown.pl $RCLONE_CONFIG_URL ./rclone.conf
+        
+        if [ -f "./rclone.conf" ]; then
+			mkdir -p /root/.config/rclone
+            RCLONE_CONFIG='/root/.config/rclone.conf'
+            echo "note: rclone.conf downloaded sucessfully. Setting RCLONE_CONFIG=$RCLONE_CONFIG and overwriting with dowloaded config file."
+            mv ./rclone.conf $RCLONE_CONFIG
+		else
+			echo "note: rclone.conf download not found."
+			ls -la ./
+        fi
+    fi
+
 	if [ -z "${RCLONE_CONFIG}" ]; then
 		RCLONE_CONFIG=/config/rclone/rclone.conf
 		echo "note: RCLONE_CONFIG env variable not defined. Assigning default path: $RCLONE_CONFIG"
@@ -30,7 +46,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 	fi
 
 	mkdir -p "$RCLONE_MOUNT_CONTAINER_PATH";
-	chown -R abc:abc $RCLONE_MOUNT_CONTAINER_PATH;
+	# chown -R abc:abc $RCLONE_MOUNT_CONTAINER_PATH;
 
 	# start rclone
 	if [ -z "${RCLONE_COMMAND}" ]; then
