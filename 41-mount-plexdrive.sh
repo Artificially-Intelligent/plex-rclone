@@ -12,6 +12,12 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
         PLEXDRIVE_MOUNT_OPTIONS=" -o read_only -v 3 --max-chunks=10 --chunk-size=20M --chunk-check-threads=20 --chunk-load-threads=3 --chunk-load-ahead=4 "
         echo "note: PLEXDRIVE_MOUNT_OPTIONS env variable not defined. Assigning default options: $PLEXDRIVE_MOUNT_OPTIONS"
     fi
+
+    #Rclone default options for use with plexdrive mounts
+    if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
+		RCLONE_MOUNT_OPTIONS=" --allow-other --max-read-ahead 131072 --read-only "
+		echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
+	fi
     
     if [ -z "${PLEXDRIVE_CONFIG_PATH}" ]; then
         PLEXDRIVE_CONFIG_PATH=/config/plexdrive/
