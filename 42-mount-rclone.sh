@@ -16,7 +16,13 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 	fi
 
 	if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
-		RCLONE_MOUNT_OPTIONS=" --read-only --allow-other --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s "
+		if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]]; then
+			# set default values to use for rclone crypt over plexdrive mount
+			RCLONE_MOUNT_OPTIONS=" --allow-other --max-read-ahead 131072 --read-only "
+		else
+			# set default values to use for rclone
+			RCLONE_MOUNT_OPTIONS=" --read-only --allow-other --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s "
+		fi
 		echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
 	fi
 
