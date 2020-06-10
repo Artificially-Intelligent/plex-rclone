@@ -16,9 +16,16 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 	fi
 
 	if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
-		RCLONE_MOUNT_OPTIONS=" --read-only --allow-other --acd-templink-threshold 0 --stats 1s --buffer-size 1G --timeout 5s --contimeout 5s "
+		RCLONE_MOUNT_OPTIONS=" --read-only --allow-other --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s "
 		echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
 	fi
+
+	if [ -z "${RCLONE_CONFIG}" ]; then
+		RCLONE_CONFIG=/config/rclone/rclone.conf
+		echo "note: RCLONE_CONFIG env variable not defined. Assigning default path: $RCLONE_CONFIG"
+	fi
+	RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
+	mkdir -p $RCLONE_CONFIG_DIR
 
 	if ! [ -z "$RCLONE_CONFIG_URL" ] ; then
         echo "RCLONE_CONFIG_URL defined. Attempting to download latest config file"
@@ -26,9 +33,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
         # /usr/bin/gdown.pl $RCLONE_CONFIG_URL ./rclone.conf
         
         if [ -f "./rclone.conf" ]; then
-			mkdir -p /root/.config/rclone
-            RCLONE_CONFIG='/root/.config/rclone.conf'
-            echo "note: rclone.conf downloaded sucessfully. Setting RCLONE_CONFIG=$RCLONE_CONFIG and overwriting with dowloaded config file."
+            echo "note: rclone.conf downloaded sucessfully. Overwriting $RCLONE_CONFIG with dowloaded config file."
             mv ./rclone.conf $RCLONE_CONFIG
 		else
 			echo "note: rclone.conf download not found."
@@ -46,7 +51,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 	fi
 
 	mkdir -p "$RCLONE_MOUNT_CONTAINER_PATH";
-	# chown -R abc:abc $RCLONE_MOUNT_CONTAINER_PATH;
+	chown -R abc:abc $RCLONE_MOUNT_CONTAINER_PATH;
 
 	# start rclone
 	if [ -z "${RCLONE_COMMAND}" ]; then
