@@ -21,7 +21,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 			RCLONE_MOUNT_OPTIONS=" --allow-other --max-read-ahead 131072 --read-only "
 		else
 			# set default values to use for rclone
-			RCLONE_MOUNT_OPTIONS=" --read-only --allow-other --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s "
+			RCLONE_MOUNT_OPTIONS=" --read-only --allow-other --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log "
 		fi
 		echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
 	fi

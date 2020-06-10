@@ -1,18 +1,22 @@
 FROM  linuxserver/plex:latest
 
 RUN \
- echo "**** install fuse & rclone ****" && \
+ echo "**** install rclone / plexdrive dependencies ****" && \
  apt-get update && \
  apt-get install -y \
   perl \
   wget \
-  rclone \
   ca-certificates \
   fuse && \
-  echo "user_allow_other" >> /etc/fuse.conf && \
-  mkdir /mnt/rclone
+  echo "user_allow_other" >> /etc/fuse.conf 
 
-RUN echo "**** install plexdrive ****" && \
+RUN echo "**** install latest rclone ****" && \
+  wget https://downloads.rclone.org/rclone-current-linux-amd64.deb && \
+  dpkg -i rclone-current-linux-amd64.deb && \
+  rm rclone-current-linux-amd64.deb
+
+
+RUN echo "**** install plexdrive 5.1.0 - latest available 2020-06-10 ****" && \
   wget https://github.com/plexdrive/plexdrive/releases/download/5.1.0/plexdrive-linux-amd64 && \
   mv ./plexdrive-linux-amd64 /usr/bin/plexdrive && \
   chmod +x /usr/bin/plexdrive
