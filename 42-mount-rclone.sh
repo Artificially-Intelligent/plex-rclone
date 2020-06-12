@@ -5,11 +5,6 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		echo "note: RCLONE_MOUNT_CONTAINER_PATH env variable not defined. Assigning default path: $RCLONE_MOUNT_CONTAINER_PATH"
 	fi
 
-	if [ -z "${RCLONE_MOUNT_REMOTE_PATH}" ]; then
-		RCLONE_MOUNT_REMOTE_PATH="REMOTE:"
-		echo "warning: RCLONE_MOUNT_REMOTE_PATH env variable not defined. Assigning default value: $RCLONE_MOUNT_REMOTE_PATH"	
-	fi
-
 	if [ -z "${RCLONE_MOUNT_CONTAINER_PATH}" ]; then
 		RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone/
 		echo "note: RCLONE_MOUNT_CONTAINER_PATH env variable not defined. Assigning default path: $RCLONE_MOUNT_CONTAINER_PATH"
@@ -19,6 +14,13 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]]; then
 			# set default values to use for rclone crypt over plexdrive mount
 			RCLONE_MOUNT_OPTIONS=" --allow-other --max-read-ahead 131072 --read-only "
+
+			if ! [ -z "${PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH}" ]; then
+				#allows users to define a different RCLONE_MOUNT_REMOTE_PATH for plexdrive so 
+				#config can be changed to plexdrive by changing only PLEXDRIVE==TRUE anloter value
+				RCLONE_MOUNT_REMOTE_PATH=$PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH
+				echo "note: PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH env variable is defined and PLEXDRIVE == $PLEXDRIVE . Assigning PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH value $RCLONE_MOUNT_REMOTE_PATH to RCLONE_MOUNT_REMOTE_PATH"
+			fi
 		else
 			# set default values to use for rclone
 			RCLONE_MOUNT_OPTIONS=" --read-only --allow-other --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log "
@@ -54,6 +56,11 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 
 	if [ ! -f "${RCLONE_CONFIG}" ]; then
 		echo "warning: Rclone config file $RCLONE_CONFIG doesn't exist. Mount a volume containing one and/or setup your own by running the command below (replacing plex-rclone with your container name if different) ' docker exec -it plex-rclone rclone config --config $RCLONE_CONFIG ' Create a 'new remote' named $RCLONE_MOUNT_REMOTE_PATH  (without the : and any text following it), or add the name you chose followed by : to enviroment variable RCLONE_MOUNT_REMOTE_PATH"
+	fi
+
+	if [ -z "${RCLONE_MOUNT_REMOTE_PATH}" ]; then
+		RCLONE_MOUNT_REMOTE_PATH="REMOTE:"
+		echo "warning: RCLONE_MOUNT_REMOTE_PATH env variable not defined. Assigning default value: $RCLONE_MOUNT_REMOTE_PATH"	
 	fi
 
 	mkdir -p "$RCLONE_MOUNT_CONTAINER_PATH";

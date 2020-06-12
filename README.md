@@ -222,6 +222,11 @@ services:
 <td align="center"><code>-e PLEXDRIVE_COMMAND=" mount -o read_only -v 3 --max-chunks=10 --chunk-size=20M --chunk-check-threads=20 --chunk-load-threads=3 --chunk-load-ahead=4 /mnt/plexdrive"</code></td>
 <td>Value is passed as a string of arguments to plexdrive. ie. <code> plexdrive $PLEXDRIVE_COMMAND & </code> If defined it superceeds all configurations specidifed in PLEXDRIVE_MOUNT_CONTAINER_PATH and PLEXDRIVE_MOUNT_OPTIONS. For config options see <a>https://rclone.org/commands/rclone_mount/</a></td>
 </tr>
+
+<tr>
+<td align="center"><code>-e PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH=" --allow-other --max-read-ahead 131072 --read-only "</code></td>
+<td>If PLEXDRIVE=TRUE these options added to the rclone mount command superseeding any defined in RCLONE_MOUNT_REMOTE_PATH. Allows container to be setup for you with plexdrive and rclone, swapping between both by changeing env var PLEXDRIVE. For more details on rlcone options see <a>https://rclone.org/commands/rclone_mount/</a></td>
+</tr>
 <tr>
 <td align="center"><code>-v /config/plexdrive</code></td>
 <td> Path containing config.json and token.json e.g. <code>~/.plexdrive</code> or <code>/root/.plexdrive</code></td>
