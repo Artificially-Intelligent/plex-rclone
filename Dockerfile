@@ -15,6 +15,10 @@ RUN echo "**** install latest rclone ****" && \
   dpkg -i rclone-current-linux-amd64.deb && \
   rm rclone-current-linux-amd64.deb
 
+RUN \
+ echo "**** install xdg-utils for rclone web gui dependencies ****" && \
+  apt-get install -y \
+  xdg-utils
 
 RUN echo "**** install plexdrive 5.1.0 - latest available 2020-06-10 ****" && \
   wget https://github.com/plexdrive/plexdrive/releases/download/5.1.0/plexdrive-linux-amd64 && \
