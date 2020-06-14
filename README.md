@@ -208,6 +208,22 @@ services:
 <td> Path containing rclone.conf e.g. <code>~/.config/rclone</code> or <code>/root/.config/rclone</code></td>
 </tr>
 <tr>
+<td align="center"><code>-e RCLONE_GUI=TRUE</code></td>
+<td>If set TRUE rclone webgui is enabled using default settings defined for RCLONE_GUI_USER, RCLONE_GUI_PASSWORD and RCLONE_GUI_PORT.<a>https://rclone.org/gui/</a></td>
+</tr>
+<tr>
+<td align="center"><code>-e RCLONE_GUI_USER=admin</code></td>
+<td>Username for accessing webgui.<a>https://rclone.org/gui/</a></td>
+</tr>
+<tr>
+<td align="center"><code>-e RCLONE_GUI_PASSWORD=password1234</code></td>
+<td>Password for accessing webgui<a>https://rclone.org/gui/</a></td>
+</tr>
+<tr>
+<td align="center"><code>-e RCLONE_GUI_PORT=13668</code></td>
+<td>Port assigned for webgui.<a>https://rclone.org/gui/</a></td>
+</tr>
+<tr>
 <td align="center"><code>-e PLEXDRIVE=TRUE</code></td>
 <td>If PLEXDRIVE=TRUE, prior to mounting rclone a plexdrive mount will be attempted. If the files are encrypted, rclone can be used to decrypt the share when it is run if a it has crypt configured to point at the the plexdrive mount path (PLEXDRIVE_MOUNT_CONTAINER_PATH=/mnt/plexdrive) or one of its subfolders. <a>https://github.com/plexdrive/plexdrive/blob/master/TUTORIAL.md</a></td>
 </tr>
