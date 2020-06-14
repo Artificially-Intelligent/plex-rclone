@@ -10,6 +10,24 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		echo "note: RCLONE_MOUNT_CONTAINER_PATH env variable not defined. Assigning default path: $RCLONE_MOUNT_CONTAINER_PATH"
 	fi
 
+	if [[ $RCLONE_GUI == "TRUE" || $RCLONE_GUI == "true" || $RCLONE_GUI == "1" || $RCLONE_GUI == "True" ]]; then	
+		if [ -z "${RCLONE_GUI_PORT}" ]; then
+			RCLONE_GUI_PORT=13668
+			echo "note: RCLONE_GUI_PORT env variable not defined. Assigning default port: $RCLONE_GUI_PORT"
+		fi
+		
+		if [ -z "${RCLONE_GUI_USER}" ]; then
+			RCLONE_GUI_USER=admin
+			echo "note: RCLONE_GUI_USER env variable not defined. Assigning default user: $RCLONE_GUI_USER"
+		fi
+
+		if [ -z "${RCLONE_GUI_PASSWORD}" ]; then
+			RCLONE_GUI_PASSWORD=1234
+			echo "note: RCLONE_GUI_PASSWORD env variable not defined. Assigning default password: $RCLONE_GUI_PASSWORD"
+		fi
+		RCLONE_GUI_CONFIG=" --rc --rc-web-gui --rc-addr :$RCLONE_GUI_PORT --rc-user=$RCLONE_GUI_USER --rc-pass=$RCLONE_GUI_PASSWORD --rc-serve "
+	fi
+
 	if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
 		if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]]; then
 			# set default values to use for rclone crypt over plexdrive mount
@@ -68,7 +86,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 
 	# start rclone
 	if [ -z "${RCLONE_COMMAND}" ]; then
-		RCLONE_COMMAND="mount $RCLONE_MOUNT_REMOTE_PATH $RCLONE_MOUNT_CONTAINER_PATH --config $RCLONE_CONFIG $RCLONE_MOUNT_OPTIONS"
+		RCLONE_COMMAND="mount $RCLONE_MOUNT_REMOTE_PATH $RCLONE_MOUNT_CONTAINER_PATH -config $RCLONE_CONFIG $RCLONE_MOUNT_OPTIONS $RCLONE_GUI_CONFIG"
 	fi
 
 	# start rclone
