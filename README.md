@@ -223,6 +223,29 @@ services:
 <td align="center"><code>-e RCLONE_GUI_PORT=13668</code></td>
 <td>Port assigned for webgui.<a>https://rclone.org/gui/</a></td>
 </tr>
+
+<tr>
+<td align="center"><code>-e RCLONE_SERVE_PORT=8080</code></td>
+<td>Port assigned for rclone serve, shares rclone remote with local network. If defined a seperate rclone session is started using same options as rclone mount via env variable RCLONE_MOUNT_OPTIONS. If RCLONE_GUI=TRUE a seperate rclone gui is also spun up on port RCLONE_SERVE_GUI_PORT <a>https://rclone.org/commands/rclone_serve/</a></td>
+</tr>
+
+<tr>
+<td align="center"><code>-e RCLONE_SERVE_USER=rclone</code></td>
+<td>User assigned for accessing rclone serve network share.<a>https://rclone.org/commands/rclone_serve/</a></td>
+</tr>
+<tr>
+<td align="center"><code>-e RCLONE_SERVE_PASSWORD=rclone</code></td>
+<td>Password assigned for accessing rclone serve network share.<a>https://rclone.org/commands/rclone_serve/</a></td>
+</tr>
+<tr>
+<td align="center"><code>-e RCLONE_SERVE_PROTOCOL=webdav</code></td>
+<td>Protocol is for rclone serve network share. Valid options are dlna, ftp, http, restic, sftp, webdav <a>https://rclone.org/commands/rclone_serve/</a></td>
+</tr>
+<tr>
+<td align="center"><code>-e  RCLONE_GUI_PORT=13669</code></td>
+<td>Port assigned for rclone serve webgui.<a>https://rclone.org/commands/rclone_serve/</a></td>
+</tr>
+
 <tr>
 <td align="center"><code>-e PLEXDRIVE=TRUE</code></td>
 <td>If PLEXDRIVE=TRUE, prior to mounting rclone a plexdrive mount will be attempted. If the files are encrypted, rclone can be used to decrypt the share when it is run if a it has crypt configured to point at the the plexdrive mount path (PLEXDRIVE_MOUNT_CONTAINER_PATH=/mnt/plexdrive) or one of its subfolders. <a>https://github.com/plexdrive/plexdrive/blob/master/TUTORIAL.md</a></td>
