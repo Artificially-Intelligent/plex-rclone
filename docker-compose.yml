@@ -14,13 +14,24 @@ services:
       - VERSION=docker
       - UMASK_SET=022 #optional
       - PLEX_CLAIM= #optional
-      - RCLONE_CONFIG=/config/rclone/rclone.conf
-      - RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone
-      - RCLONE_MOUNT_REMOTE_PATH="REMOTE:"
-      - RCLONE_MOUNT_OPTIONS=" --read-only --allow-other --acd-templink-threshold 0 --stats 1s --buffer-size 1G --timeout 5s --contimeout 5s "
+      - "RCLONE_CONFIG=/config/rclone/rclone.conf"
+      - "RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone"
+      - "RCLONE_MOUNT_REMOTE_PATH=REMOTE:"
+      - "RCLONE_MOUNT_OPTIONS= --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h "
+      - RCLONE_GUI=TRUE
+      - RCLONE_SERVE_PORT=13670
+      - "RCLONE_CONFIG_URL=https://drive.google.com/uc?export=download&id=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" 
     volumes:
-      - /path/to/library:/config
-      - /path/to/tvseries:/tv
-      - /path/to/movies:/movies
-      - /path/to/config/rclone:/config/rclone/
+      - plex_temp:/transcode
+      - plex_config:/config
+    ports:
+      - "32400"
+      - "32410-32414"
+      - "32469"
+      - "8384"
+      - "3005"
+      - "13668-13670"
     restart: unless-stopped
+volumes:
+  plex_temp:
+  plex_config:
