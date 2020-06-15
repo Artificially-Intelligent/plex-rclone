@@ -3,7 +3,7 @@ services:
   plex:
     image: artificiallyintelligent/plex-rclone
     container_name: plex
-    network_mode: host
+    network_mode: bridge
     devices:
       - "/dev/fuse:/dev/fuse"
     cap_add:
@@ -17,19 +17,20 @@ services:
       - "RCLONE_CONFIG=/config/rclone/rclone.conf"
       - "RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone"
       - "RCLONE_MOUNT_REMOTE_PATH=REMOTE:"
-      - "RCLONE_MOUNT_OPTIONS= --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h "
+      - "RCLONE_MOUNT_OPTIONS= --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --dir-cache-time 24h "
+      - RCLONE_SERVE_PORT=13670
       - RCLONE_GUI=TRUE
-      - "RCLONE_CONFIG_URL=https://drive.google.com/uc?export=download&id=xxxxxxxxxxxx-replace-with-your-own-xxxxxxxxxx" 
+      - "RCLONE_CONFIG_URL=https://drive.google.com/uc?export=download&id=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx" 
     volumes:
       - plex_temp:/transcode
       - plex_config:/config
     ports:
-      - "32400"
-      - "32410-32414"
-      - "32469"
-      - "8384"
-      - "3005"
-      - "13668-13670"
+      - "32400:32400"
+      - "32410-32414:32410-32414"
+      - "32469:32469"
+      - "8384:8384"
+      - "3005:3005"
+      - "13668-13670:13668-13670"
     restart: unless-stopped
 volumes:
   plex_temp:

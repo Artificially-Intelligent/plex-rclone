@@ -135,14 +135,15 @@ fi
 echo "Connection details"
 echo -------------------------------------
 echo "Substitute localhost with ip address of docker host machine to connect from other computers"
-echo ""
+echo " "
 echo "Plex URL: http://localhost:32400"
-echo "RCLONE Management GUI for Plex: http://localhost:$RCLONE_GUI_PORT"
-echo ""
+echo "RCLONE Management GUI for Plex: http://localhost:$RCLONE_GUI_PORT/web"
+echo " "
 if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
-	echo ""
+	echo " "
 	echo "RCLONE Network Drive: http://localhost:$RCLONE_SERVE_PORT"
 	echo "RCLONE Management GUI for Network Drive: http://localhost:$RCLONE_SERVE_GUI_PORT"
+	echo "Instructions for mounting as network drive in windows: https://www2.le.ac.uk/offices/itservices/ithelp/my-computer/files-and-security/work-off-campus/webdav/webdav-on-windows-10"
 fi
-echo ""
+echo " "
 echo -------------------------------------
