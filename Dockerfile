@@ -10,6 +10,7 @@ RUN \
   # setup / install / config script dependencies
   perl \
   wget \
+  unzip \
   # rclone dependencies
   ca-certificates \
   fuse \
@@ -34,13 +35,16 @@ RUN echo "**** install plexdrive 5.1.0 - latest available 2020-06-10 ****" && \
  # Copy gdrive file downloader script
 COPY gdown.pl /usr/bin/gdown.pl
 
-# Copy rclone webgui to cache
+# Copy rclone webgui to rclone cache
 ADD https://github.com/rclone/rclone-webui-react/releases/download/v0.1.0/currentbuild.zip /root/.cache/rclone/webgui/v0.1.0.zip
-
+RUN  unzip /root/.cache/rclone/webgui/v0.1.0.zip 'build/*' -d /root/.cache/rclone/webgui/build/ && \
+  echo 'v0.1.0' > /root/.cache/rclone/webgui/tag
+ 
   # Copy rcone startup script to init.d
 COPY rclone/mount-plexdrive.sh /etc/cont-init.d/41-mount-plexdrive
 COPY rclone/mount-rclone.sh /etc/cont-init.d/42-mount-rclone
-RUN  chmod +x /etc/cont-init.d/* /usr/bin/gdown.pl 
+RUN  chmod +x /etc/cont-init.d/* /usr/bin/gdown.pl && \
+  chmod +r /root/.cache/rclone/webgui/v0.1.0.zip
 
 # # Copy FTP config
 # ENV FTP_USER rclone

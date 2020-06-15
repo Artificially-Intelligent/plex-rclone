@@ -83,7 +83,7 @@
   -e RCLONE_CONFIG=/config/rclone/rclone.conf
   -e RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone \
   -e RCLONE_MOUNT_REMOTE_PATH="REMOTE:" \
-  -e RCLONE_MOUNT_OPTIONS=" --read-only --allow-other --acd-templink-threshold 0 --stats 1s --buffer-size 1G --timeout 5s --contimeout 5s " \
+  -e RCLONE_MOUNT_OPTIONS="  --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h  " \
   --restart unless-stopped \
   artificiallyintelligent/plex-rclone
 </code></pre>
@@ -109,7 +109,7 @@ services:
       - RCLONE_CONFIG=/config/rclone/rclone.conf
       - RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone
       - RCLONE_MOUNT_REMOTE_PATH="REMOTE:"
-      - RCLONE_MOUNT_OPTIONS=" --read-only --allow-other --acd-templink-threshold 0 --stats 1s --buffer-size 1G --timeout 5s --contimeout 5s "
+      - RCLONE_MOUNT_OPTIONS="  --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h "
     volumes:
       - /path/to/library:/config
       - /path/to/tvseries:/tv
@@ -192,7 +192,7 @@ services:
 <td>for selecting which remote defined in rclone.conf to use for mounting.</td>
 </tr>
 <tr>
-<td align="center"><code>-e RCLONE_MOUNT_OPTIONS=" --read-only --allow-other --acd-templink-threshold 0 --stats 1s --buffer-size 1G --timeout 5s --contimeout 5s "</code></td>
+<td align="center"><code>-e RCLONE_MOUNT_OPTIONS="  --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h "</code></td>
 <td>Options added to the rclone mount command. For more details see <a>https://rclone.org/commands/rclone_mount/</a></td>
 </tr>
 <tr>
@@ -200,7 +200,7 @@ services:
 <td>specify the path to rclone.conf</td>
 </tr>
 <tr>
-<td align="center"><code>-e RCLONE_COMMAND=" mount REMOTE: /mnt/rclone --config /config/rclone/rclone.conf --read-only --allow-other --acd-templink-threshold 0 --stats 1s --buffer-size 1G --timeout 5s --contimeout 5s "</code></td>
+<td align="center"><code>-e RCLONE_COMMAND=" mount REMOTE: /mnt/rclone --config /config/rclone/rclone.conf --allow-other --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h "</code></td>
 <td>Value is passed as a string of arguments to rclone. ie. <code> rclone $RCLONE_COMMAND & </code> If defined it superceeds all configurations specidifed in RCLONE_MOUNT_CONTAINER_PATH, RCLONE_MOUNT_REMOTE_PATH, RCLONE_MOUNT_OPTIONS and RCLONE_CONFIG. For config options see <a>https://rclone.org/commands/rclone_mount/</a></td>
 </tr>
 <tr>
@@ -263,7 +263,7 @@ services:
 </tr>
 
 <tr>
-<td align="center"><code>-e PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH=" --allow-other --max-read-ahead 131072 --read-only "</code></td>
+<td align="center"><code>-e PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH=" --max-read-ahead 131072 --read-only "</code></td>
 <td>If PLEXDRIVE=TRUE these options added to the rclone mount command superseeding any defined in RCLONE_MOUNT_REMOTE_PATH. Allows container to be setup for you with plexdrive and rclone, swapping between both by changeing env var PLEXDRIVE. For more details on rlcone options see <a>https://rclone.org/commands/rclone_mount/</a></td>
 </tr>
 <tr>
