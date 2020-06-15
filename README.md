@@ -225,7 +225,7 @@ services:
 </tr>
 
 <tr>
-<td align="center"><code>-e RCLONE_SERVE_PORT=8080</code></td>
+<td align="center"><code>-e RCLONE_SERVE_PORT=13670</code></td>
 <td>Port assigned for rclone serve, shares rclone remote with local network. If defined a seperate rclone session is started using same options as rclone mount via env variable RCLONE_MOUNT_OPTIONS. If RCLONE_GUI=TRUE a seperate rclone gui is also spun up on port RCLONE_SERVE_GUI_PORT <a>https://rclone.org/commands/rclone_serve/</a></td>
 </tr>
 

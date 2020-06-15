@@ -27,6 +27,11 @@ RUN echo "**** install latest rclone ****" && \
   rm rclone-current-linux-amd64.deb && \
   mkdir -p /root/.cache/rclone/webgui/
 
+# Copy rclone webgui to rclone cache
+ADD https://github.com/rclone/rclone-webui-react/releases/download/v0.1.0/currentbuild.zip /root/.cache/rclone/webgui/v0.1.0.zip
+RUN  unzip /root/.cache/rclone/webgui/v0.1.0.zip 'build/*' -d /root/.cache/rclone/webgui/current/ && \
+  echo 'v0.1.0' > /root/.cache/rclone/webgui/tag
+
 RUN echo "**** install plexdrive 5.1.0 - latest available 2020-06-10 ****" && \
   wget https://github.com/plexdrive/plexdrive/releases/download/5.1.0/plexdrive-linux-amd64 && \
   mv ./plexdrive-linux-amd64 /usr/bin/plexdrive && \
@@ -35,10 +40,6 @@ RUN echo "**** install plexdrive 5.1.0 - latest available 2020-06-10 ****" && \
  # Copy gdrive file downloader script
 COPY gdown.pl /usr/bin/gdown.pl
 
-# Copy rclone webgui to rclone cache
-ADD https://github.com/rclone/rclone-webui-react/releases/download/v0.1.0/currentbuild.zip /root/.cache/rclone/webgui/v0.1.0.zip
-RUN  unzip /root/.cache/rclone/webgui/v0.1.0.zip 'build/*' -d /root/.cache/rclone/webgui/build/ && \
-  echo 'v0.1.0' > /root/.cache/rclone/webgui/tag
  
   # Copy rcone startup script to init.d
 COPY rclone/mount-plexdrive.sh /etc/cont-init.d/41-mount-plexdrive

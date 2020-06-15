@@ -19,8 +19,7 @@ services:
       - "RCLONE_MOUNT_REMOTE_PATH=REMOTE:"
       - "RCLONE_MOUNT_OPTIONS= --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h "
       - RCLONE_GUI=TRUE
-      - RCLONE_SERVE_PORT=13670
-      - "RCLONE_CONFIG_URL=https://drive.google.com/uc?export=download&id=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" 
+      - "RCLONE_CONFIG_URL=https://drive.google.com/uc?export=download&id=xxxxxxxxxxxx-replace-with-your-own-xxxxxxxxxx" 
     volumes:
       - plex_temp:/transcode
       - plex_config:/config

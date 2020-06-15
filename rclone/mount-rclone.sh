@@ -134,13 +134,15 @@ fi
 
 echo "Connection details"
 echo -------------------------------------
-echo "substitute localhost with ip address of docker host machine to connect from other computers"
-echo 
+echo "Substitute localhost with ip address of docker host machine to connect from other computers"
+echo ""
 echo "Plex URL: http://localhost:32400"
-echo "RCLONE Network Drive: http://localhost:32411"
 echo "RCLONE Management GUI for Plex: http://localhost:$RCLONE_GUI_PORT"
-echo
-echo "RCLONE Network Drive: http://localhost:$RCLONE_SERVE_PORT"
-echo "RCLONE Management GUI for Network Drive: http://localhost:$RCLONE_SERVE_GUI_PORT"
-echo
+echo ""
+if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
+	echo ""
+	echo "RCLONE Network Drive: http://localhost:$RCLONE_SERVE_PORT"
+	echo "RCLONE Management GUI for Network Drive: http://localhost:$RCLONE_SERVE_GUI_PORT"
+fi
+echo ""
 echo -------------------------------------
