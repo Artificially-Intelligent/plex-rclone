@@ -20,7 +20,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
         if [ $CLOUD_LIBRARY_VERSION_TAG -ge $LIBRARY_VERSION_TAG ]; then
             echo "note: Newer master library version ($CLOUD_LIBRARY_VERSION_TAG) detected. Overwriting library (version: $LIBRARY_VERSION_TAG)"    
             cp $PLEX_LIBRARY_MASTER_PATH /config/plex-library.tar.gz
-            tar xvzf /config/plex-library.tar.gz /config/Library_new
+            tar -C /config/Library_new -zxvf /config/plex-library.tar.gz
             if [ $? -eq 0 ]; then
                 rm -r $PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
                 mv "/config/Library_new/Application Support" $PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
