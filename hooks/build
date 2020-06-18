@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# $IMAGE_NAME var is injected into the build so the tag is correct. 
+
+echo "Github Source Branch: $SOURCE_BRANCH"
+echo "Image Name: $IMAGE_NAME"
+
+if [ -z "${BUILD_DATE}" ]; then
+  BUILD_DATE=`date -I`
+fi
+
+if [ -z "${DOCKER_REPO}" ]; then
+  DOCKER_REPO=`echo $IMAGE_NAME |  sed 's/:.*//'`
+fi
+
+if [ -z "${SOURCE_REPO}" ]; then
+  SOURCE_REPO=$DOCKER_REPO
+fi
+
+if [ -z "${SOURCE_IMAGE}" ]; then
+  SOURCE_IMAGE=linuxserver/plex
+  echo "SOURCE_IMAGE not defined, using default value: $SOURCE_IMAGE"
+fi
+
+if [ -z "${SOURCE_TAG}" ]; then
+  SOURCE_TAG=`echo $IMAGE_NAME | sed -n 's/^.*\://p'`
+	if [ "${SOURCE_TAG}" == "latest" ]; then
+		SOURCE_TAG=latest
+	fi
+fi
+
+if [ -z "${PACKAGE_LIST}" ]; then
+  PACKAGE_LIST=`echo $DOCKER_REPO | sed -n 's/^.*\///p'`
+fi
+
+echo "Source Docker Image: $SOURCE_IMAGE:$SOURCE_TAG"
+
+docker build --build-arg VCS_REF=`git rev-parse --short HEAD` \
+  --build-arg BLD_DATE=$BUILD_DATE \
+  --build-arg DEST_IMAGE=$IMAGE_NAME \
+  --build-arg SRC_REPO=$SOURCE_REPO \
+  --build-arg SRC_BRANCH=$SOURCE_BRANCH \
+  --build-arg SRC_COMMIT=$SOURCE_COMMIT \
+  --build-arg SRC_IMAGE=$SOURCE_IMAGE \
+  --build-arg SRC_TAG=$SOURCE_TAG \
+  -t $IMAGE_NAME .

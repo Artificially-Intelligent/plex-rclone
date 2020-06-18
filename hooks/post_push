@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+
+if [ -z "${DOCKER_REPO}" ]; then
+  DOCKER_REPO=`echo $IMAGE_NAME |  sed 's/:.*//'`
+fi
+
+echo "Working dir and contents I see are:"
+echo `pwd`
+echo `ls`
+
+docker inspect $IMAGE_NAME
+
+## Not all bash commands are available. notably grep -o -e options fail!!
+VERSION=`docker inspect $IMAGE_NAME | grep "R_VERSION" | head -n1 | sed 's/.*\([0-9].[0-9].[0-9]\"\)/\1/' | sed 's/".*//'`
+echo "Version being built is:"
+echo $VERSION
+
+#if [ -z "${VERSION}" ]; then
+if [ -z "${VERSION}" ] || [ "${DOCKER_TAG}" != "latest" ]; then 
+    echo "Tag not latest or was unable to extract R Version for version tagging..."
+else
+    echo "tagging $IMAGE_NAME as $DOCKER_REPO:$VERSION..."
+    docker tag $IMAGE_NAME $DOCKER_REPO:$VERSION
+
+    echo "pushing $DOCKER_REPO:$VERSION to hub..."
+    docker push $DOCKER_REPO:$VERSION
+fi
+#echo "pushing $DOCKER_REPO:$SOURCE_COMMIT to hub..."
+#docker tag $IMAGE_NAME $DOCKER_REPO:$SOURCE_COMMIT
+#docker push $DOCKER_REPO:$SOURCE_COMMIT
+
+
