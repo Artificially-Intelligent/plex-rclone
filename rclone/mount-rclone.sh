@@ -42,7 +42,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 			fi
 		else
 			# set default values to use for rclone
-			export RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h "
+			export RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --dir-cache-time 24h --multi-thread-streams=20 "
 		fi
 		echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
 	fi
@@ -118,9 +118,8 @@ if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
     #     echo "note: RCLONE_SERVE_PORT env variable not defined. Assigning default port: $RCLONE_SERVE_PORT"
     # fi
 
-
     if [ -z "${RCLONE_SERVE_PROTOCOL}" ]; then
-        RCLONE_SERVE_PROTOCOL=webdav
+        RCLONE_SERVE_PROTOCOL=sftp
         echo "note: RCLONE_SERVE_PROTOCOL env variable not defined. Assigning default password: $RCLONE_SERVE_PROTOCOL. (options: dlna, ftp, http, restic, sftp, webdav) see https://rclone.org/commands/rclone_serve/ for more info"
     fi
 

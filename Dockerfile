@@ -2,6 +2,24 @@ ARG SOURCE_IMAGE=linuxserver/plex
 ARG SOURCE_TAG=latest
 FROM  $SOURCE_IMAGE:$SOURCE_TAG
 
+ARG BLD_DATE
+ARG MAINTAINER=slink42
+ARG SOURCE_REPO=Artificially-Intelligent/plex-rclone
+ARG SOURCE_BRANCH=master
+ARG SOURCE_COMMIT=XXXXXXXX
+ARG DEST_IMAGE="ArtificiallyIntelligent/plex-rclone"
+
+ENV SOURCE_DOCKER_IMAGE=$SOURCE_IMAGE:$SOURCE_TAG
+ENV SOURCE_REPO=$SOURCE_REPO
+ENV SOURCE_BRANCH=$SOURCE_BRANCH
+ENV SOURCE_COMMIT=$SOURCE_COMMIT
+ENV DOCKER_IMAGE=$DEST_IMAGE
+ENV BUILD_DATE=$BUILD_DATE
+
+# add image labels
+LABEL build_version="$DOCKER_IMAGE version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL build_source="$SOURCE_BRANCH - https://github.com/${SOURCE_REPO}/commit/${SOURCE_COMMIT}"
+LABEL maintainer="$MAINTAINER"
 
 RUN \
  echo "**** install rclone / plexdrive dependencies ****" && \
@@ -48,8 +66,10 @@ COPY gdown.pl /usr/bin/gdown.pl
 
  
   # Copy rcone startup script to init.d
-COPY rclone/mount-plexdrive.sh /etc/cont-init.d/41-mount-plexdrive
-COPY rclone/mount-rclone.sh /etc/cont-init.d/42-mount-rclone
+COPY rclone/mount-plexdrive.sh /etc/cont-init.d/30-mount-plexdrive
+COPY rclone/mount-rclone.sh /etc/cont-init.d/31-mount-rclone
+COPY rclone/extract-plex-library-from-master.sh /etc/cont-init.d/32-extract-plex-library-from-master
+
 RUN  chmod +x /etc/cont-init.d/* /usr/bin/gdown.pl
 
 

@@ -174,6 +174,11 @@ volumes:
 <td align="center"><code>-v /movies</code></td>
 <td>Media goes here. Add as many as needed e.g. <code>/movies</code>, <code>/tv</code>, etc.</td>
 </tr>
+<tr>
+<td align="center"><code>-e PLEX_LIBRARY_MASTER_PATH=/mnt/rclone/Storage/plex-library.tar.gz</code></td>
+<td>Local path to tar.gz file containing master copy of plex library. If PLEX_LIBRARY_MASTER_PATH is defined and file at the path is found that is newer than prior versions loaded, tar contents will be extracted and existing library overwirtten.</td>
+</tr>
+
 </tbody>
 </table>
 
