@@ -82,7 +82,7 @@
   -v /path/to/config/rclone:/config/rclone/ \
   -e RCLONE_CONFIG=/config/rclone/rclone.conf
   -e RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone \
-  -e RCLONE_MOUNT_REMOTE_PATH="REMOTE:" \
+  -e RCLONE_MOUNT_REMOTE_PATH="CRYPT:" \
   -e RCLONE_MOUNT_OPTIONS="  --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h  " \
   --restart unless-stopped \
   artificiallyintelligent/plex-rclone
@@ -108,7 +108,7 @@ services:
       - PLEX_CLAIM= #optional
       - "RCLONE_CONFIG=/config/rclone/rclone.conf"
       - "RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone"
-      - "RCLONE_MOUNT_REMOTE_PATH=REMOTE:"
+      - "RCLONE_MOUNT_REMOTE_PATH=CRYPT:"
       - "RCLONE_MOUNT_OPTIONS= --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --dir-cache-time 24h "
       - RCLONE_SERVE_PORT=13670
       - RCLONE_GUI=TRUE
@@ -178,7 +178,7 @@ volumes:
 </table>
 
 <h2>Rclone Parameters</h2>
-<p>In additon to the parmaters used in the linuxserver.io base image additional parameters have been added to manage the rclone mount.</p>
+<p>In additon to the parmaters used in the linuxserver.io base image additional parameters have been added to manage the rclone mount. Along side those listed all env variables rclone is designed to look for are also supported, details for which can be found in detailed instructions links at <a>https://rclone.org/docs/</a> and at <a>https://rclone.org/crypt/</a> </p>
 <table>
 <thead>
 <tr>
@@ -199,7 +199,7 @@ volumes:
 <td>for path inside container where rclone share is mounted.</td>
 </tr>
 <tr>
-<td align="center"><code>-e RCLONE_MOUNT_REMOTE_PATH="REMOTE:"</code></td>
+<td align="center"><code>-e RCLONE_MOUNT_REMOTE_PATH="CRYPT:"</code></td>
 <td>for selecting which remote defined in rclone.conf to use for mounting.</td>
 </tr>
 <tr>
@@ -211,7 +211,7 @@ volumes:
 <td>specify the path to rclone.conf</td>
 </tr>
 <tr>
-<td align="center"><code>-e RCLONE_COMMAND=" mount REMOTE: /mnt/rclone --config /config/rclone/rclone.conf --allow-other --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h "</code></td>
+<td align="center"><code>-e RCLONE_COMMAND=" mount CRYPT: /mnt/rclone --config /config/rclone/rclone.conf --allow-other --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h "</code></td>
 <td>Value is passed as a string of arguments to rclone. ie. <code> rclone $RCLONE_COMMAND & </code> If defined it superceeds all configurations specidifed in RCLONE_MOUNT_CONTAINER_PATH, RCLONE_MOUNT_REMOTE_PATH, RCLONE_MOUNT_OPTIONS and RCLONE_CONFIG. For config options see <a>https://rclone.org/commands/rclone_mount/</a></td>
 </tr>
 <tr>

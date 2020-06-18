@@ -16,11 +16,16 @@ services:
       - PLEX_CLAIM= #optional
       - "RCLONE_CONFIG=/config/rclone/rclone.conf"
       - "RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone"
-      - "RCLONE_MOUNT_REMOTE_PATH=REMOTE:"
+      - "RCLONE_MOUNT_REMOTE_PATH=CRYPT:"
       - "RCLONE_MOUNT_OPTIONS= --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --dir-cache-time 24h "
-      - RCLONE_SERVE_PORT=13670
       - RCLONE_GUI=TRUE
-      - "RCLONE_CONFIG_URL=https://drive.google.com/uc?export=download&id=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx" 
+      - "RCLONE_DRIVE_SCOPE=drive.readonly" # for connection to google drive remote https://rclone.org/drive/ 
+      - "RCLONE_DRIVE_TEAM_DRIVE=<your team drive id - can be found in rclone.conf>"
+      - 'RCLONE_DRIVE_SERVICE_ACCOUNT_CREDENTIALS=<your service account json file contents>'
+      - "RCLONE_CRYPT_PASSWORD=<your encryption password or pass phrase>" # for decrypting remote contents https://rclone.org/crypt/
+      - "RCLONE_CRYPT_PASSWORD2=<your encryption password or pass phrase for salt>"
+      - "RCLONE_CRYPT_DIRECTORY_NAME_ENCRYPTION=true"
+      - "RCLONE_CRYPT_FILENAME_ENCRYPTION=standard"
     volumes:
       - plex_temp:/transcode
       - plex_config:/config
@@ -30,6 +35,7 @@ services:
       - "32469:32469"
       - "8384:8384"
       - "3005:3005"
+      - "1900:1900"
       - "13668-13670:13668-13670"
     restart: unless-stopped
 volumes:

@@ -69,11 +69,28 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
     fi
 
 	if [ ! -f "${RCLONE_CONFIG}" ]; then
-		echo "warning: Rclone config file $RCLONE_CONFIG doesn't exist. Mount a volume containing one and/or setup your own by running the command below (replacing plex-rclone with your container name if different) ' docker exec -it plex-rclone rclone config --config $RCLONE_CONFIG ' Create a 'new remote' named $RCLONE_MOUNT_REMOTE_PATH  (without the : and any text following it), or add the name you chose followed by : to enviroment variable RCLONE_MOUNT_REMOTE_PATH"
+		GENERIC_RCLONE_CONFIG=/root/.config/rclone/rclone.conf
+		echo "note: Rclone config file $RCLONE_CONFIG doesn't exist, generating a generic file $GENERIC_RCLONE_CONFIG to be used instead. Configurations for use with this file need to be configured using environment variables. See https://rclone.org/crypt/ and detailed instructions links at https://rclone.org/docs/ for details."
+		RCLONE_CONFIG=$GENERIC_RCLONE_CONFIG
+		RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
+		mkdir -p $RCLONE_CONFIG_DIR
+		
+		cat << EOT > $RCLONE_CONFIG
+[REMOTE]
+type = drive
+
+[CRYPT]
+type = crypt
+remote = REMOTE:
+EOT
+		echo "note: generic rclone config file $RCLONE_CONFIG contents:"
+		cat $RCLONE_CONFIG
+
+		echo "If you want to replace this with a differnt file, mount a volume containing a rclong.conf file and/or setup a new rclone.conf by running the command (replacing plex-rclone with your container name if different) ' docker exec -it plex-rclone rclone config --config $RCLONE_CONFIG ' Create a 'new remote' named $RCLONE_MOUNT_REMOTE_PATH  (without the : and any text following it), or add the name you choose followed by : to enviroment variable RCLONE_MOUNT_REMOTE_PATH"
 	fi
 
 	if [ -z "${RCLONE_MOUNT_REMOTE_PATH}" ]; then
-		export RCLONE_MOUNT_REMOTE_PATH="REMOTE:"
+		export RCLONE_MOUNT_REMOTE_PATH="CRYPT:"
 		echo "warning: RCLONE_MOUNT_REMOTE_PATH env variable not defined. Assigning default value: $RCLONE_MOUNT_REMOTE_PATH"	
 	fi
 
@@ -118,12 +135,14 @@ if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
             echo "note: RCLONE_SERVE_PASSWORD env variable not defined. Assigning default password: $RCLONE_SERVE_PASSWORD"
         fi
     fi
-
+	if [[ $RCLONE_SERVE_PROTOCOL == "http" || $RCLONE_SERVE_PROTOCOL == "ftp" || $RCLONE_SERVE_PROTOCOL == "sftp" ]]; then
+		RCLONE_SERVE_AUTH_CONFIG=" --user $RCLONE_SERVE_USER --pass $RCLONE_SERVE_PASSWORD "
+	fi
 
 
     if [ -z "${RCLONE_SERVE_COMMAND}" ]; then
     # $RCLONE_GUI_CONFIG
-        RCLONE_SERVE_COMMAND="serve $RCLONE_SERVE_PROTOCOL $RCLONE_MOUNT_REMOTE_PATH --config $RCLONE_CONFIG $RCLONE_MOUNT_OPTIONS --addr :$RCLONE_SERVE_PORT $RCLONE_SERVE_GUI_CONFIG "
+        RCLONE_SERVE_COMMAND="serve $RCLONE_SERVE_PROTOCOL $RCLONE_MOUNT_REMOTE_PATH --config $RCLONE_CONFIG $RCLONE_MOUNT_OPTIONS --addr :$RCLONE_SERVE_PORT $RCLONE_SERVE_GUI_CONFIG $RCLONE_SERVE_AUTH_CONFIG "
     fi
 
     # start rclone serve
@@ -141,9 +160,28 @@ echo "RCLONE Management GUI for Plex: http://localhost:$RCLONE_GUI_PORT/web"
 echo " "
 if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
 	echo " "
-	echo "RCLONE Network Drive: http://localhost:$RCLONE_SERVE_PORT"
+	if [[ $RCLONE_SERVE_PROTOCOL == "webdav" ]]; then
+		echo "RCLONE Network Drive: http://localhost:$RCLONE_SERVE_PORT"
+	fi
+	if [[ $RCLONE_SERVE_PROTOCOL == "dlna" ]]; then
+		echo "RCLONE Network Drive: http://localhost:$RCLONE_SERVE_PORT"
+	fi
+	if [[ $RCLONE_SERVE_PROTOCOL == "http" ]]; then
+		echo "RCLONE Network Drive: http://$RCLONE_GUI_USER:$RCLONE_GUI_PASSWORD@localhost:$RCLONE_SERVE_PORT"
+	fi
+	if [[ $RCLONE_SERVE_PROTOCOL == "ftp" ]]; then
+		echo "RCLONE Network Drive: ftp://$RCLONE_GUI_USER:$RCLONE_GUI_PASSWORD@localhost:$RCLONE_SERVE_PORT"
+	fi
+	if [[ $RCLONE_SERVE_PROTOCOL == "sftp" ]]; then
+		echo "RCLONE Network Drive: sftp://$RCLONE_GUI_USER:$RCLONE_GUI_PASSWORD@localhost:$RCLONE_SERVE_PORT"
+	fi
 	echo "RCLONE Management GUI for Network Drive: http://localhost:$RCLONE_SERVE_GUI_PORT"
 	echo "Instructions for mounting as network drive in windows: https://www2.le.ac.uk/offices/itservices/ithelp/my-computer/files-and-security/work-off-campus/webdav/webdav-on-windows-10"
 fi
 echo " "
 echo -------------------------------------
+
+
+# export nfs share
+echo "$RCLONE_MOUNT_CONTAINER_PATH (ro,sync)" >> /etc/exports
+exportfs -a
