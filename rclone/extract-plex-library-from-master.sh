@@ -7,6 +7,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
     if  [ "$(ls -A $PLEX_LIBRARY_MASTER_PATH)" ] || sleep 13
     if  [ "$(ls -A $PLEX_LIBRARY_MASTER_PATH)" ] || sleep 40
 
+
     if   [ -f "$PLEX_LIBRARY_MASTER_PATH" ] : then
         echo "note: PLEX_LIBRARY_MASTER_PATH $PLEX_LIBRARY_MASTER_PATH detected. Checking if new version is present"
         if [ -f "$PLEX_LIBRARY_MASTER_PATH/tag" ]; then
