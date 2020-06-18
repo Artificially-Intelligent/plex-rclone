@@ -182,6 +182,9 @@ echo " "
 echo -------------------------------------
 
 
-# export nfs share
-echo "$RCLONE_MOUNT_CONTAINER_PATH (ro,sync)" >> /etc/exports
-exportfs -a
+# if ! [ -z "${NFS_CLIENT}" ]; then	
+# 	# export nfs share
+# 	echo "creating nfs share with export: $RCLONE_MOUNT_CONTAINER_PATH $NFS_CLIENT(ro,sync,no_subtree_check)"
+# 	echo "$RCLONE_MOUNT_CONTAINER_PATH *(ro,sync,no_subtree_check)" >> /etc/exports
+# 	exportfs -a
+# fi

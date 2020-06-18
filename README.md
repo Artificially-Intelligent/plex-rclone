@@ -277,7 +277,12 @@ volumes:
 <td align="center"><code>-e PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH=" --max-read-ahead 131072 --read-only "</code></td>
 <td>If PLEXDRIVE=TRUE these options added to the rclone mount command superseeding any defined in RCLONE_MOUNT_REMOTE_PATH. Allows container to be setup for you with plexdrive and rclone, swapping between both by changeing env var PLEXDRIVE. For more details on rlcone options see <a>https://rclone.org/commands/rclone_mount/</a></td>
 </tr>
-<tr>
+
+<!-- <tr>
+<td align="center"><code>-e NFS_CLIENT=*</code></td>
+<td>If NFS_CLIENT is defined an nfs share is created for rclone mount path accessible to client matching NFS_CLIENT value. The value provided in the example would result in the nfs config entry $RCLONE_MOUNT_CONTAINER_PATH *(ro,sync) which provides unrestricted readonly access to nfs share</td>
+</tr>
+<tr> -->
 <td align="center"><code>-v /config/plexdrive</code></td>
 <td> Path containing config.json and token.json e.g. <code>~/.plexdrive</code> or <code>/root/.plexdrive</code></td>
 </tr>
