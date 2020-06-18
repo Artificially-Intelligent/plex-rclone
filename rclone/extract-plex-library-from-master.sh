@@ -31,5 +31,5 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
             rm -f  /config/plex-library.tar.gz
             rm -rf /config/Library_new
         fi
-    fi  
+    fi
 fi
