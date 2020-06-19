@@ -21,12 +21,12 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
 
         if [ $CLOUD_LIBRARY_VERSION_TAG -ge $LIBRARY_VERSION_TAG ]; then
             echo "note: Newer master library version ($CLOUD_LIBRARY_VERSION_TAG) detected. Overwriting library (version: $LIBRARY_VERSION_TAG)"
-            
-            cp $PLEX_LIBRARY_MASTER_PATH /tmp/
+
+            cp "$PLEX_LIBRARY_MASTER_PATH" /tmp/
             # rclone copy $PLEX_LIBRARY_MASTER_PATH /tmp --config $RCLONE_CONFIG --bwlimit 6M
 
             mkdir -p /tmp/
-            tar -C /tmp/ -zxvf /tmp/$PLEX_LIBRARY_MASTER_TAR
+            tar -C /tmp/ -zxvf "/tmp/$PLEX_LIBRARY_MASTER_TAR"
 
             if [ $? -eq 0 ] ; then
                 mkdir -p  "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
@@ -35,7 +35,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
                 echo "$CLOUD_LIBRARY_VERSION_TAG" > "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/tag"
                 echo "done!"
             fi
-            rm -f  /tmp/$PLEX_LIBRARY_MASTER_TAR
+            rm -f  "/tmp/$PLEX_LIBRARY_MASTER_TAR"
             rm -rf /tmp/Library
         fi
     fi
