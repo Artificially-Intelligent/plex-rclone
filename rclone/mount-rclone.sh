@@ -1,7 +1,30 @@
 #!/usr/bin/with-contenv bash
 if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE == "False" ]] ; then 
+	if [ -z "${RCLONE_MOUNT_CONTAINER_PATH}" ]; then
+		export RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone
+		echo "note: RCLONE_MOUNT_CONTAINER_PATH env variable not defined. Assigning default path: $RCLONE_MOUNT_CONTAINER_PATH"
+	fi
 
 	if [[ $RCLONE_GUI == "TRUE" || $RCLONE_GUI == "true" || $RCLONE_GUI == "1" || $RCLONE_GUI == "True" ]]; then	
+		if [ -z "${RCLONE_GUI_PORT}" ]; then
+			RCLONE_GUI_PORT=13668
+			echo "note: RCLONE_GUI_PORT env variable not defined. Assigning default port: $RCLONE_GUI_PORT"
+		fi
+		
+		if [ -z "${RCLONE_SERVE_GUI_PORT}" ]; then
+			RCLONE_SERVE_GUI_PORT=13669
+			echo "note: RCLONE_SERVE_GUI_PORT env variable not defined. Assigning default port: $RCLONE_SERVE_GUI_PORT"
+		fi
+
+		if [ -z "${RCLONE_GUI_USER}" ]; then
+			RCLONE_GUI_USER=rclone
+			echo "note: RCLONE_GUI_USER env variable not defined. Assigning default user: $RCLONE_GUI_USER"
+		fi
+
+		if [ -z "${RCLONE_GUI_PASSWORD}" ]; then
+			RCLONE_GUI_PASSWORD=rclone
+			echo "note: RCLONE_GUI_PASSWORD env variable not defined. Assigning default password: $RCLONE_GUI_PASSWORD"
+		fi
 		RCLONE_GUI_CONFIG=" --rc --rc-web-gui --rc-addr :$RCLONE_GUI_PORT --rc-user=$RCLONE_GUI_USER --rc-pass=$RCLONE_GUI_PASSWORD --rc-serve "
 		RCLONE_SERVE_GUI_CONFIG=" --rc --rc-web-gui --rc-addr :$RCLONE_SERVE_GUI_PORT --rc-user=$RCLONE_GUI_USER --rc-pass=$RCLONE_GUI_PASSWORD --rc-serve "
 	fi
@@ -24,7 +47,12 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
 	fi
 
-	mkdir -p ${RCLONE_CONFIG%/*}
+	if [ -z "${RCLONE_CONFIG}" ]; then
+		export RCLONE_CONFIG=/config/rclone/rclone.conf
+		echo "note: RCLONE_CONFIG env variable not defined. Assigning default path: $RCLONE_CONFIG"
+	fi
+	RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
+	mkdir -p $RCLONE_CONFIG_DIR
 
 	if ! [ -z "$RCLONE_CONFIG_URL" ] ; then
         echo "RCLONE_CONFIG_URL defined. Attempting to download latest config file"
@@ -41,7 +69,12 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
     fi
 
 	if [ ! -f "${RCLONE_CONFIG}" ]; then
-		echo "note: Rclone config file $RCLONE_CONFIG doesn't exist, generating a generic version to be used instead. Configurations for use with this file need to be configured using environment variables. See https://rclone.org/crypt/ and detailed instructions links at https://rclone.org/docs/ for details."		
+		GENERIC_RCLONE_CONFIG=/root/.config/rclone/rclone.conf
+		echo "note: Rclone config file $RCLONE_CONFIG doesn't exist, generating a generic file $GENERIC_RCLONE_CONFIG to be used instead. Configurations for use with this file need to be configured using environment variables. See https://rclone.org/crypt/ and detailed instructions links at https://rclone.org/docs/ for details."
+		RCLONE_CONFIG=$GENERIC_RCLONE_CONFIG
+		RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
+		mkdir -p $RCLONE_CONFIG_DIR
+		
 		cat << EOT > $RCLONE_CONFIG
 [REMOTE]
 type = drive
