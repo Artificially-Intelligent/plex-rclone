@@ -26,7 +26,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
             # rclone copy $PLEX_LIBRARY_MASTER_PATH /tmp --config $RCLONE_CONFIG --bwlimit 6M
 
             mkdir -p /tmp/
-            tar -C /tmp/ -zxvf "/tmp/$PLEX_LIBRARY_MASTER_TAR"
+            tar -C /tmp/ -zxf "/tmp/$PLEX_LIBRARY_MASTER_TAR"
 
             if [ $? -eq 0 ] ; then
                 mkdir -p  "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
