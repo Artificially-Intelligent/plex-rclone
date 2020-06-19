@@ -1,3 +1,4 @@
+@@ -1,42 +0,0 @@
 #!/usr/bin/with-contenv bash
 
 if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
@@ -11,7 +12,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
     if [ -f "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
         PLEX_LIBRARY_MASTER_TAR=`basename $PLEX_LIBRARY_MASTER_PATH`
         echo "note: PLEX_LIBRARY_MASTER_PATH $PLEX_LIBRARY_MASTER_PATH detected. Checking if new version is present"
-        if [ -f "$PLEX_LIBRARY_MASTER_PATH/tag" ]; then
+        if [ -f "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/tag" ]; then
             LIBRARY_VERSION_TAG=`cat $PLEX_LIBRARY_MASTER_PATH/tag`
         else
             LIBRARY_VERSION_TAG=1
@@ -37,6 +38,8 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
             fi
             rm -f  "/tmp/$PLEX_LIBRARY_MASTER_TAR"
             rm -rf /tmp/Library
+        else
+            echo "note: Master library version ($CLOUD_LIBRARY_VERSION_TAG) matched local version library (version: $LIBRARY_VERSION_TAG)"
         fi
     fi
 fi
