@@ -3,35 +3,40 @@
 if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
     #wait a few seconds for mount to be active
 
-    PLEX_LIBRARY_MASTER_TAR=`basename $PLEX_LIBRARY_MASTER_PATH`
+    [ "$(ls -A $RCLONE_MOUNT_CONTAINER_PATH)" ] || sleep 2
+    [ "$(ls -A $RCLONE_MOUNT_CONTAINER_PATH)" ] || sleep 5
+    [ "$(ls -A $RCLONE_MOUNT_CONTAINER_PATH)" ] || sleep 13
+    [ "$(ls -A $RCLONE_MOUNT_CONTAINER_PATH)" ] || sleep 40
 
-    echo "note: PLEX_LIBRARY_MASTER_PATH $PLEX_LIBRARY_MASTER_PATH detected. Checking if new version is present"
-    if [ -f "$PLEX_LIBRARY_MASTER_PATH/tag" ]; then
-        LIBRARY_VERSION_TAG=`cat $PLEX_LIBRARY_MASTER_PATH/tag`
-    else
-        LIBRARY_VERSION_TAG=1
-    fi
-
-    CLOUD_LIBRARY_VERSION_TAG=$(date -d "`stat -c %y "$PLEX_LIBRARY_MASTER_PATH"`" +%s)
-
-    if [ -z "${RCLONE_CONFIG}" ]; then
-        RCLONE_CONFIG=/config/rclone/rclone.conf
-    fi
-
-    if [ $CLOUD_LIBRARY_VERSION_TAG -ge $LIBRARY_VERSION_TAG ]; then
-        echo "note: Newer master library version ($CLOUD_LIBRARY_VERSION_TAG) detected. Overwriting library (version: $LIBRARY_VERSION_TAG)"
-        rclone copy $PLEX_LIBRARY_MASTER_PATH /config --config $RCLONE_CONFIG --bwlimit 6M
-
-        mkdir -p /config/Library_new
-        tar -C /config/Library_new -zxvf /config/$PLEX_LIBRARY_MASTER_TAR
-
-        if [ $? -eq 0 ] ; then
-            rm -r $PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
-            mv "/config/Library_new/Application Support" $PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
-            echo CLOUD_LIBRARY_VERSION_TAG > $PLEX_LIBRARY_MASTER_PATH/tag
-            echo "done!"
+    if [ -f "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
+        PLEX_LIBRARY_MASTER_TAR=`basename $PLEX_LIBRARY_MASTER_PATH`
+        echo "note: PLEX_LIBRARY_MASTER_PATH $PLEX_LIBRARY_MASTER_PATH detected. Checking if new version is present"
+        if [ -f "$PLEX_LIBRARY_MASTER_PATH/tag" ]; then
+            LIBRARY_VERSION_TAG=`cat $PLEX_LIBRARY_MASTER_PATH/tag`
+        else
+            LIBRARY_VERSION_TAG=1
         fi
-        rm -f  /config/plex-library.tar.gz
-        rm -rf /config/Library_new
+
+        CLOUD_LIBRARY_VERSION_TAG=$(date -d "`stat -c %y "$PLEX_LIBRARY_MASTER_PATH"`" +%s)
+
+        if [ $CLOUD_LIBRARY_VERSION_TAG -ge $LIBRARY_VERSION_TAG ]; then
+            echo "note: Newer master library version ($CLOUD_LIBRARY_VERSION_TAG) detected. Overwriting library (version: $LIBRARY_VERSION_TAG)"
+            
+            cp $PLEX_LIBRARY_MASTER_PATH /tmp/
+            # rclone copy $PLEX_LIBRARY_MASTER_PATH /tmp --config $RCLONE_CONFIG --bwlimit 6M
+
+            mkdir -p /tmp/
+            tar -C /tmp/ -zxvf /tmp/$PLEX_LIBRARY_MASTER_TAR
+
+            if [ $? -eq 0 ] ; then
+                mkdir -p  "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
+                rm -r "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
+                mv "/tmp/Library/Application Support" "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
+                echo "$CLOUD_LIBRARY_VERSION_TAG" > "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/tag"
+                echo "done!"
+            fi
+            rm -f  /tmp/$PLEX_LIBRARY_MASTER_TAR
+            rm -rf /tmp/Library
+        fi
     fi
 fi

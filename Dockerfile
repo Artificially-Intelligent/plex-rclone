@@ -72,17 +72,10 @@ COPY rclone/extract-plex-library-from-master.sh /etc/cont-init.d/32-extract-plex
 
 RUN  chmod +x /etc/cont-init.d/* /usr/bin/gdown.pl
 
-
-# # Copy FTP config
-# ENV FTP_USER rclone
-# ENV FTP_PASS rclone
-# ENV PASV_ADDRESS REQUIRED
-# COPY ftp/run-vsftpd.sh /etc/cont-init.d/43-run-vsftpd.sh
-# COPY ftp/vsftpd.conf /etc/vsftpd/vsftpd.conf
-# COPY ftp/vsftpd_virtual /etc/pam.d/vsftpd_virtual
-
-# RUN chmod +x /etc/cont-init.d/43-run-vsftpd.sh && \
-# 		mkdir -p /var/run/vsftpd/empty
-
 WORKDIR /data
 ENV XDG_CONFIG_HOME=/config
+ENV RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone
+ENV RCLONE_GUI_PORT=13668
+ENV RCLONE_SERVE_GUI_PORT=13669
+ENV RCLONE_GUI_USER=rclone
+ENV RCLONE_GUI_PASSWORD=rclone
