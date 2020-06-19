@@ -2,10 +2,10 @@
 
 if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
     #wait a few seconds for mount to be active
-    if  [ "$(ls -A $PLEX_LIBRARY_MASTER_PATH)" ] || sleep 2
-    if  [ "$(ls -A $PLEX_LIBRARY_MASTER_PATH)" ] || sleep 5
-    if  [ "$(ls -A $PLEX_LIBRARY_MASTER_PATH)" ] || sleep 13
-    if  [ "$(ls -A $PLEX_LIBRARY_MASTER_PATH)" ] || sleep 40
+    [ "$(ls -A $PLEX_LIBRARY_MASTER_PATH)" ] || sleep 2
+    [ "$(ls -A $PLEX_LIBRARY_MASTER_PATH)" ] || sleep 5
+    [ "$(ls -A $PLEX_LIBRARY_MASTER_PATH)" ] || sleep 13
+    [ "$(ls -A $PLEX_LIBRARY_MASTER_PATH)" ] || sleep 40
 
     if   [ -f "$PLEX_LIBRARY_MASTER_PATH" ] ; then
         echo "note: PLEX_LIBRARY_MASTER_PATH $PLEX_LIBRARY_MASTER_PATH detected. Checking if new version is present"
@@ -21,7 +21,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
             echo "note: Newer master library version ($CLOUD_LIBRARY_VERSION_TAG) detected. Overwriting library (version: $LIBRARY_VERSION_TAG)"    
             cp $PLEX_LIBRARY_MASTER_PATH /config/plex-library.tar.gz
             tar -C /config/Library_new -zxvf /config/plex-library.tar.gz
-            if [ $? -eq 0 ]; then
+            if [ $? -eq 0 ] ; then
                 rm -r $PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
                 mv "/config/Library_new/Application Support" $PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
                 echo CLOUD_LIBRARY_VERSION_TAG > $PLEX_LIBRARY_MASTER_PATH/tag
