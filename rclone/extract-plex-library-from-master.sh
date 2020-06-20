@@ -12,7 +12,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
         PLEX_LIBRARY_MASTER_TAR=`basename $PLEX_LIBRARY_MASTER_PATH`
         echo "note: PLEX_LIBRARY_MASTER_PATH $PLEX_LIBRARY_MASTER_PATH detected. Checking if new version is present"
         if [ -f "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/tag" ]; then
-            LIBRARY_VERSION_TAG=`cat $PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/tag`
+            LIBRARY_VERSION_TAG=`cat "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/tag"`
         else
             LIBRARY_VERSION_TAG=1
         fi
