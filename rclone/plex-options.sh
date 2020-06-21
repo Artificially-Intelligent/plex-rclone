@@ -3,6 +3,11 @@
 PREFNAME="$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/Plex Media Server/Preferences.xml"
 
 
+FriendlyName="Unraiden_Cloud" 
+if !  grep -qs "FriendlyName" "$PREFNAME" && ! [ -z "$FriendlyName" ] ; then
+	echo "FriendlyName defined, adding FriendlyName=$FriendlyName to $PREFNAME"
+	sed -i "s|/>| FriendlyName=\"${FriendlyName}\"\/>|g" "${PREFNAME}"
+fi
 if !  grep -qs "allowedNetworks" "$PREFNAME" && ! [ -z "$allowedNetworks" ] ; then
 	echo "allowedNetworks defined, adding allowedNetworks=$allowedNetworks to $PREFNAME"
 	sed -i "s|/>| allowedNetworks=\"${allowedNetworks}\"\/>|g" "${PREFNAME}"
@@ -30,4 +35,25 @@ fi
 if ! grep -qs "DlnaEnabled" "$PREFNAME" && ! [ -z "$DlnaEnabled" ]; then
 	echo "DlnaEnabled defined, adding DlnaEnabled=$DlnaEnabled to $PREFNAME"
 	sed -i "s/\/>/ DlnaEnabled=\"${DlnaEnabled}\"\/>/g" "${PREFNAME}"
+fi
+
+if ! grep -qs "GenerateChapterThumbBehavior" "$PREFNAME" && ! [ -z "$GenerateChapterThumbBehavior" ]; then
+	echo "GenerateChapterThumbBehavior defined, adding GenerateChapterThumbBehavior=$GenerateChapterThumbBehavior to $PREFNAME"
+	sed -i "s/\/>/ GenerateChapterThumbBehavior=\"${GenerateChapterThumbBehavior}\"\/>/g" "${PREFNAME}"
+fi
+if ! grep -qs "LoudnessAnalysisBehavior" "$PREFNAME" && ! [ -z "$LoudnessAnalysisBehavior" ]; then
+	echo "LoudnessAnalysisBehavior defined, adding LoudnessAnalysisBehavior=$LoudnessAnalysisBehavior to $PREFNAME"
+	sed -i "s/\/>/ LoudnessAnalysisBehavior=\"${LoudnessAnalysisBehavior}\"\/>/g" "${PREFNAME}"
+fi
+if ! grep -qs "ScheduledLibraryUpdateInterval" "$PREFNAME" && ! [ -z "$ScheduledLibraryUpdateInterval" ]; then
+	echo "ScheduledLibraryUpdateInterval defined, adding ScheduledLibraryUpdateInterval=$ScheduledLibraryUpdateInterval to $PREFNAME"
+	sed -i "s/\/>/ ScheduledLibraryUpdateInterval=\"${ScheduledLibraryUpdateInterval}\"\/>/g" "${PREFNAME}"
+fi
+if ! grep -qs "ScheduledLibraryUpdatesEnabled" "$PREFNAME" && ! [ -z "$ScheduledLibraryUpdatesEnabled" ]; then
+	echo "ScheduledLibraryUpdatesEnabled defined, adding ScheduledLibraryUpdatesEnabled=$ScheduledLibraryUpdatesEnabled to $PREFNAME"
+	sed -i "s/\/>/ ScheduledLibraryUpdatesEnabled=\"${ScheduledLibraryUpdatesEnabled}\"\/>/g" "${PREFNAME}"
+fi
+if ! grep -qs "ButlerTaskRefreshLibraries" "$PREFNAME" && ! [ -z "$ButlerTaskRefreshLibraries" ]; then
+	echo "ButlerTaskRefreshLibraries defined, adding ButlerTaskRefreshLibraries=$ButlerTaskRefreshLibraries to $PREFNAME"
+	sed -i "s/\/>/ ButlerTaskRefreshLibraries=\"${ButlerTaskRefreshLibraries}\"\/>/g" "${PREFNAME}"
 fi

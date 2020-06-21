@@ -28,13 +28,16 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
             mkdir -p /tmp/
             tar -C /tmp/ -zxf "/tmp/$PLEX_LIBRARY_MASTER_TAR"
 
+            echo "note: untar to /tmp complete"
+
             if [ $? -eq 0 ] ; then
                 mv  "/tmp/Library/Application Support/Plex Media Server/Preferences.xml" "/tmp/Library/Application Support/Plex Media Server/Preferences-master.xml"
                 cp  "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/Plex Media Server/Preferences.xml" "/tmp/Library/Application Support/Plex Media Server/Preferences.xml"
+                chown -R abc:abc /tmp/Library
                 rm -r "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
                 mv "/tmp/Library/Application Support" "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
                 echo "$CLOUD_LIBRARY_VERSION_TAG" > "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/tag"
-                echo "done!"
+                echo "library replacement done!"
             fi
             rm -f  "/tmp/$PLEX_LIBRARY_MASTER_TAR"
             rm -rf /tmp/Library
