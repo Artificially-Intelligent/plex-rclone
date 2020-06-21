@@ -68,7 +68,8 @@ COPY gdown.pl /usr/bin/gdown.pl
   # Copy rcone startup script to init.d
 COPY rclone/mount-plexdrive.sh /etc/cont-init.d/30-mount-plexdrive
 COPY rclone/mount-rclone.sh /etc/cont-init.d/31-mount-rclone
-COPY rclone/extract-plex-library-from-master.sh /etc/cont-init.d/32-extract-plex-library-from-master
+COPY rclone/plex-options.sh /etc/cont-init.d/46-plex-options
+COPY rclone/plex-library-from-master.sh /etc/cont-init.d/47-plex-library-from-master
 
 RUN  chmod +x /etc/cont-init.d/* /usr/bin/gdown.pl
 
