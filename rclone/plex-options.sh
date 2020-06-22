@@ -55,3 +55,7 @@ if ! grep -qs "ButlerTaskRefreshLibraries" "$PREFNAME" && ! [ -z "$ButlerTaskRef
 	echo "ButlerTaskRefreshLibraries defined, adding ButlerTaskRefreshLibraries=$ButlerTaskRefreshLibraries to $PREFNAME"
 	sed -i "s/\/>/ ButlerTaskRefreshLibraries=\"${ButlerTaskRefreshLibraries}\"\/>/g" "${PREFNAME}"
 fi
+if ! grep -qs "TranscoderTempDirectory" "$PREFNAME" && ! [ -z "$TranscoderTempDirectory" ]; then
+	echo "TranscoderTempDirectory defined, adding TranscoderTempDirectory=$TranscoderTempDirectory to $PREFNAME"
+	sed -i "s/\/>/ TranscoderTempDirectory=\"${TranscoderTempDirectory}\"\/>/g" "${PREFNAME}"
+fi
