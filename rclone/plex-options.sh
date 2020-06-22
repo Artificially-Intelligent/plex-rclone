@@ -2,8 +2,6 @@
 
 PREFNAME="$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/Plex Media Server/Preferences.xml"
 
-
-FriendlyName="Unraiden_Cloud" 
 if !  grep -qs "FriendlyName" "$PREFNAME" && ! [ -z "$FriendlyName" ] ; then
 	echo "FriendlyName defined, adding FriendlyName=$FriendlyName to $PREFNAME"
 	sed -i "s|/>| FriendlyName=\"${FriendlyName}\"\/>|g" "${PREFNAME}"

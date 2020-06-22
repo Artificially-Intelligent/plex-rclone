@@ -28,7 +28,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
             mkdir -p /tmp/
             tar -C /tmp/ -zxf "/tmp/$PLEX_LIBRARY_MASTER_TAR"
 
-            echo "note: untar to /tmp complete"
+            echo "note: $PLEX_LIBRARY_MASTER_TAR untar to /tmp complete"
 
             if [ $? -eq 0 ] ; then
                 mv  "/tmp/Library/Application Support/Plex Media Server/Preferences.xml" "/tmp/Library/Application Support/Plex Media Server/Preferences-master.xml"

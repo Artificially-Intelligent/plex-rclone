@@ -161,6 +161,7 @@ if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
 	echo " "
 	if [[ $RCLONE_SERVE_PROTOCOL == "webdav" ]]; then
 		echo "RCLONE Network Drive: http://localhost:$RCLONE_SERVE_PORT"
+		echo "Instructions for mounting as network drive in windows: https://www2.le.ac.uk/offices/itservices/ithelp/my-computer/files-and-security/work-off-campus/webdav/webdav-on-windows-10"
 	fi
 	if [[ $RCLONE_SERVE_PROTOCOL == "dlna" ]]; then
 		echo "RCLONE Network Drive: http://localhost:$RCLONE_SERVE_PORT"
@@ -175,7 +176,6 @@ if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
 		echo "RCLONE Network Drive: sftp://$RCLONE_GUI_USER:$RCLONE_GUI_PASSWORD@localhost:$RCLONE_SERVE_PORT"
 	fi
 	echo "RCLONE Management GUI for Network Drive: http://localhost:$RCLONE_SERVE_GUI_PORT"
-	echo "Instructions for mounting as network drive in windows: https://www2.le.ac.uk/offices/itservices/ithelp/my-computer/files-and-security/work-off-campus/webdav/webdav-on-windows-10"
 fi
 echo " "
 echo -------------------------------------
