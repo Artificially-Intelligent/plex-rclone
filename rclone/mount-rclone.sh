@@ -154,8 +154,8 @@ echo "Connection details"
 echo -------------------------------------
 echo "Substitute localhost with ip address of docker host machine to connect from other computers"
 echo " "
-echo "Plex URL: http://localhost:32400"
-echo "RCLONE Management GUI for Plex: http://localhost:$RCLONE_GUI_PORT/web"
+echo "Plex URL: http://localhost:32400/web"
+echo "RCLONE Management GUI for Plex: http://localhost:$RCLONE_GUI_PORT"
 echo " "
 if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
 	echo " "
