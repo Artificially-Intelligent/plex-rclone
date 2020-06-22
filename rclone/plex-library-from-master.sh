@@ -37,7 +37,11 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
                 rm -r "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
                 mv "/tmp/Library/Application Support" "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
                 echo "$CLOUD_LIBRARY_VERSION_TAG" > "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/tag"
-                echo "library replacement done!"
+                echo "-----------------------------------------------------------------"
+                echo "-----------------------------------------------------------------"
+                echo "------------------- library replacement done! -------------------"
+                echo "-----------------------------------------------------------------"
+                echo "-----------------------------------------------------------------"
             fi
             rm -f  "/tmp/$PLEX_LIBRARY_MASTER_TAR"
             rm -rf /tmp/Library
