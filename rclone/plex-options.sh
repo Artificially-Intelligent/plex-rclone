@@ -58,3 +58,11 @@ if ! grep -qs "TranscoderTempDirectory" "$PREFNAME" && ! [ -z "$TranscoderTempDi
 	echo "TranscoderTempDirectory defined, adding TranscoderTempDirectory=$TranscoderTempDirectory to $PREFNAME"
 	sed -i "s|/>| TranscoderTempDirectory=\"${TranscoderTempDirectory}\"\/>|g" "${PREFNAME}"
 fi
+if ! grep -qs "LanNetworksBandwidth" "$PREFNAME" && ! [ -z "$LanNetworksBandwidth" ]; then
+	echo "LanNetworksBandwidth defined, adding LanNetworksBandwidth=$LanNetworksBandwidth to $PREFNAME"
+	sed -i "s|/>| LanNetworksBandwidth=\"${LanNetworksBandwidth}\"\/>|g" "${PREFNAME}"
+fi
+if ! grep -qs "TreatWanIpAsLocal" "$PREFNAME" && ! [ -z "$TreatWanIpAsLocal" ]; then
+	echo "TreatWanIpAsLocal defined, adding TreatWanIpAsLocal=$TreatWanIpAsLocal to $PREFNAME"
+	sed -i "s|/>| TreatWanIpAsLocal=\"${TreatWanIpAsLocal}\"\/>|g" "${PREFNAME}"
+fi

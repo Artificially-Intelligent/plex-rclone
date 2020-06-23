@@ -42,7 +42,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 			fi
 		else
 			# set default values to use for rclone
-			export RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --dir-cache-time 24h --multi-thread-streams=20 "
+			export RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --dir-cache-time 24h --multi-thread-streams=20 "
 		fi
 		echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
 	fi
