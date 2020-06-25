@@ -75,8 +75,13 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
 		mkdir -p $RCLONE_CONFIG_DIR
 		
+
+		if [ -z "${PLEXDRIVE_MOUNT_CONTAINER_PATH}" ]; then
+			# duplicated from mount-plexdrive.sh as changes made there not accessible
+			PLEXDRIVE_MOUNT_CONTAINER_PATH=/mnt/plexdrive
+		fi
 		if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]] ; then 
-			DEFAULT_REMOTE=$RCLONE_MOUNT_CONTAINER_PATH
+			DEFAULT_REMOTE=$PLEXDRIVE_MOUNT_CONTAINER_PATH
 		else
 			DEFAULT_REMOTE=REMOTE:
 		fi
