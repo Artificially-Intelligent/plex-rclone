@@ -13,9 +13,9 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
         echo "note: PLEXDRIVE_MOUNT_OPTIONS env variable not defined. Assigning default options: $PLEXDRIVE_MOUNT_OPTIONS"
     fi
 
-    if ! [ -z "${PLEXDRIVE_TEAM_DRIVE_ID}" ]; then
-        PLEXDRIVE_MOUNT_OPTIONS=" $PLEXDRIVE_MOUNT_OPTIONS --drive-id=$PLEXDRIVE_TEAM_DRIVE_ID "
-        echo "note: PLEXDRIVE_TEAM_DRIVE_ID env variable defined. Adding --drive-id=$PLEXDRIVE_TEAM_DRIVE_ID to plexdrive options"
+    if ! [ -z "${RCLONE_DRIVE_TEAM_DRIVE}" ]; then
+        PLEXDRIVE_MOUNT_OPTIONS=" $RCLONE_DRIVE_TEAM_DRIVE --drive-id=$RCLONE_DRIVE_TEAM_DRIVE "
+        echo "note: RCLONE_DRIVE_TEAM_DRIVE env variable defined. Adding --drive-id=$RCLONE_DRIVE_TEAM_DRIVE to plexdrive options"
     fi
 
     # #Rclone default options for use with plexdrive mounts
