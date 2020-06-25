@@ -75,25 +75,23 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
 		mkdir -p $RCLONE_CONFIG_DIR
 		
-
-		if [ -z "${PLEXDRIVE_MOUNT_CONTAINER_PATH}" ]; then
-			# duplicated from mount-plexdrive.sh as changes made there not accessible
-			PLEXDRIVE_MOUNT_CONTAINER_PATH=/mnt/plexdrive
-		fi
-		if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]] ; then 
-			DEFAULT_REMOTE=$PLEXDRIVE_MOUNT_CONTAINER_PATH
-		else
-			DEFAULT_REMOTE=REMOTE:
-		fi
-
 		cat << EOT > $RCLONE_CONFIG
 [REMOTE]
 type = drive
 
 [CRYPT]
 type = crypt
-remote = $DEFAULT_REMOTE
 EOT
+		if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]] ; then 
+			if [ -z "${PLEXDRIVE_MOUNT_CONTAINER_PATH}" ]; then
+				# duplicated from mount-plexdrive.sh as changes made there not accessible
+				PLEXDRIVE_MOUNT_CONTAINER_PATH=/mnt/plexdrive/
+			fi
+			echo "remote = $PLEXDRIVE_MOUNT_CONTAINER_PATH" >> $RCLONE_CONFIG
+		else
+			echo "remote = REMOTE:" >> $RCLONE_CONFIG
+		fi
+
 		echo "note: generic rclone config file $RCLONE_CONFIG contents:"
 		cat $RCLONE_CONFIG
 

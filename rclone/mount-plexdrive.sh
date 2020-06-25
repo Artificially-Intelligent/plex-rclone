@@ -9,8 +9,13 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
     fi
 
     if [ -z "${PLEXDRIVE_MOUNT_OPTIONS}" ]; then
-        PLEXDRIVE_MOUNT_OPTIONS=" -o read_only -v 3 --max-chunks=10 --chunk-size=20M --chunk-check-threads=20 --chunk-load-threads=3 --chunk-load-ahead=4 "
+        PLEXDRIVE_MOUNT_OPTIONS=" -o read_only -v 2 --max-chunks=10 --chunk-size=20M --chunk-check-threads=20 --chunk-load-threads=3 --chunk-load-ahead=4 "
         echo "note: PLEXDRIVE_MOUNT_OPTIONS env variable not defined. Assigning default options: $PLEXDRIVE_MOUNT_OPTIONS"
+    fi
+
+    if ! [ -z "${PLEXDRIVE_TEAM_DRIVE_ID}" ]; then
+        PLEXDRIVE_MOUNT_OPTIONS=" $PLEXDRIVE_MOUNT_OPTIONS --drive-id=$PLEXDRIVE_TEAM_DRIVE_ID "
+        echo "note: PLEXDRIVE_TEAM_DRIVE_ID env variable defined. Adding --drive-id=$PLEXDRIVE_TEAM_DRIVE_ID to plexdrive options"
     fi
 
     # #Rclone default options for use with plexdrive mounts
@@ -27,16 +32,7 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
     mkdir -p "$PLEXDRIVE_CONFIG_PATH";
 
 
-    if ! [ -z "${PLEXDRIVE_TOKEN_JSON}" ]; then
-        echo PLEXDRIVE_TOKEN_JSON > ${PLEXDRIVE_CONFIG_PATH}/token.json
-        echo "note: PLEXDRIVE_TOKEN_JSON env variable not defined. Replacing ${PLEXDRIVE_CONFIG_PATH}/token.json with variable contents"
-    fi
     
-    if ! [ -z "${PLEXDRIVE_CONFIG_JSON}" ]; then
-        echo PLEXDRIVE_CONFIG_JSON > ${PLEXDRIVE_CONFIG_PATH}/config.json
-        echo "note: PLEXDRIVE_CONFIG_JSON env variable not defined. Replacing ${PLEXDRIVE_CONFIG_PATH}/token.json with variable contents"
-    fi
-
     if ! [ -z "$PLEXDRIVE_CONFIG_URL_TOKEN" ] && ! [ -z "$PLEXDRIVE_CONFIG_URL_CONFIG" ] ; then
         echo "PLEXDRIVE_CONFIG_URL_TOKEN and PLEXDRIVE_CONFIG_URL_CONFIG defined. Attempting to download latest config files"
         curl -L -o ./token.json $PLEXDRIVE_CONFIG_URL_TOKEN 
@@ -61,7 +57,17 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
         fi
     fi
 
-    if ! [[ $PLEXDRIVE_CONFIG_PATH == "/root/.plexdrive" ]]; then 
+    if ! [ -z "${PLEXDRIVE_TOKEN_JSON}" ]; then
+        echo $PLEXDRIVE_TOKEN_JSON > ${PLEXDRIVE_CONFIG_PATH}token.json
+        echo "note: PLEXDRIVE_TOKEN_JSON env variable not defined. Replacing ${PLEXDRIVE_CONFIG_PATH}token.json with variable contents"
+    fi
+    
+    if ! [ -z "${PLEXDRIVE_CONFIG_JSON}" ]; then
+        echo $PLEXDRIVE_CONFIG_JSON > ${PLEXDRIVE_CONFIG_PATH}config.json
+        echo "note: PLEXDRIVE_CONFIG_JSON env variable not defined. Replacing ${PLEXDRIVE_CONFIG_PATH}token.json with variable contents"
+    fi
+
+    if ! [[ $PLEXDRIVE_CONFIG_PATH == "/root/.plexdrive/" ]]; then 
         #Link to default plexdrive config path
         ln -s $PLEXDRIVE_CONFIG_PATH /root/.plexdrive
     fi
@@ -72,7 +78,6 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
     if [ ! -f "${PLEXDRIVE_CONFIG_PATH}token.json" ]; then
         echo "warning: PLEXDRIVE config file ${PLEXDRIVE_CONFIG_PATH}token.json doesn't exist. Please create one and place in folder mounted to /config/plexdrive"
     fi
-
 
     mkdir -p "$PLEXDRIVE_MOUNT_CONTAINER_PATH";
     chown -R abc:abc $PLEXDRIVE_MOUNT_CONTAINER_PATH;
