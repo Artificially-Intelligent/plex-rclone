@@ -26,6 +26,17 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
 
     mkdir -p "$PLEXDRIVE_CONFIG_PATH";
 
+
+    if ! [ -z "${PLEXDRIVE_TOKEN_JSON}" ]; then
+        echo PLEXDRIVE_TOKEN_JSON > ${PLEXDRIVE_CONFIG_PATH}/token.json
+        echo "note: PLEXDRIVE_TOKEN_JSON env variable not defined. Replacing ${PLEXDRIVE_CONFIG_PATH}/token.json with variable contents"
+    fi
+    
+    if ! [ -z "${PLEXDRIVE_CONFIG_JSON}" ]; then
+        echo PLEXDRIVE_CONFIG_JSON > ${PLEXDRIVE_CONFIG_PATH}/config.json
+        echo "note: PLEXDRIVE_CONFIG_JSON env variable not defined. Replacing ${PLEXDRIVE_CONFIG_PATH}/token.json with variable contents"
+    fi
+
     if ! [ -z "$PLEXDRIVE_CONFIG_URL_TOKEN" ] && ! [ -z "$PLEXDRIVE_CONFIG_URL_CONFIG" ] ; then
         echo "PLEXDRIVE_CONFIG_URL_TOKEN and PLEXDRIVE_CONFIG_URL_CONFIG defined. Attempting to download latest config files"
         curl -L -o ./token.json $PLEXDRIVE_CONFIG_URL_TOKEN 

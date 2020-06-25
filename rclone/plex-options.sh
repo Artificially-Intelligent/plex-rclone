@@ -66,3 +66,7 @@ if ! grep -qs "TreatWanIpAsLocal" "$PREFNAME" && ! [ -z "$TreatWanIpAsLocal" ]; 
 	echo "TreatWanIpAsLocal defined, adding TreatWanIpAsLocal=$TreatWanIpAsLocal to $PREFNAME"
 	sed -i "s|/>| TreatWanIpAsLocal=\"${TreatWanIpAsLocal}\"\/>|g" "${PREFNAME}"
 fi
+if ! grep -qs "RelayEnabled" "$PREFNAME" && ! [ -z "$RelayEnabled" ]; then
+	echo "RelayEnabled defined, adding RelayEnabled=$RelayEnabled to $PREFNAME"
+	sed -i "s|/>| RelayEnabled=\"${RelayEnabled}\"\/>|g" "${PREFNAME}"
+fi
