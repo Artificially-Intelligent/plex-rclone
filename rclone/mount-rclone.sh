@@ -75,13 +75,19 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
 		mkdir -p $RCLONE_CONFIG_DIR
 		
+		if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]] ; then 
+			DEFAULT_REMOTE=$RCLONE_MOUNT_CONTAINER_PATH
+		else
+			DEFAULT_REMOTE=REMOTE:
+		fi
+
 		cat << EOT > $RCLONE_CONFIG
 [REMOTE]
 type = drive
 
 [CRYPT]
 type = crypt
-remote = REMOTE:
+remote = $DEFAULT_REMOTE
 EOT
 		echo "note: generic rclone config file $RCLONE_CONFIG contents:"
 		cat $RCLONE_CONFIG
