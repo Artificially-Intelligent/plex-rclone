@@ -59,12 +59,12 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
 
     if ! [ -z "${PLEXDRIVE_TOKEN_JSON}" ]; then
         echo $PLEXDRIVE_TOKEN_JSON > ${PLEXDRIVE_CONFIG_PATH}token.json
-        echo "note: PLEXDRIVE_TOKEN_JSON env variable not defined. Replacing ${PLEXDRIVE_CONFIG_PATH}token.json with variable contents"
+        echo "note: PLEXDRIVE_TOKEN_JSON env variable defined. Replacing ${PLEXDRIVE_CONFIG_PATH}token.json with variable contents"
     fi
     
     if ! [ -z "${PLEXDRIVE_CONFIG_JSON}" ]; then
         echo $PLEXDRIVE_CONFIG_JSON > ${PLEXDRIVE_CONFIG_PATH}config.json
-        echo "note: PLEXDRIVE_CONFIG_JSON env variable not defined. Replacing ${PLEXDRIVE_CONFIG_PATH}token.json with variable contents"
+        echo "note: PLEXDRIVE_CONFIG_JSON env variable defined. Replacing ${PLEXDRIVE_CONFIG_PATH}token.json with variable contents"
     fi
 
     if ! [[ $PLEXDRIVE_CONFIG_PATH == "/root/.plexdrive/" ]]; then 
@@ -88,6 +88,6 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
     fi
 
     # start PLEXDRIVE
-    echo "Starting PLEXDRIVE: PLEXDRIVE $PLEXDRIVE_COMMAND"
+    echo "Starting PLEXDRIVE: plexdrive $PLEXDRIVE_COMMAND"
     plexdrive $PLEXDRIVE_COMMAND &
 fi

@@ -29,22 +29,23 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		RCLONE_SERVE_GUI_CONFIG=" --rc --rc-web-gui --rc-addr :$RCLONE_SERVE_GUI_PORT --rc-user=$RCLONE_GUI_USER --rc-pass=$RCLONE_GUI_PASSWORD --rc-serve "
 	fi
 
-	if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
-		if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]]; then
-			# set default values to use for rclone crypt over plexdrive mount
-			export RCLONE_MOUNT_OPTIONS=" --max-read-ahead 131072 --read-only "
+	
+	if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]]; then
+		# set default values to use for rclone crypt over plexdrive mount
+		export RCLONE_MOUNT_OPTIONS=" --max-read-ahead 131072 --read-only "
 
-			if ! [ -z "${PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH}" ]; then
-				#allows users to define a different RCLONE_MOUNT_REMOTE_PATH for plexdrive so 
-				#config can be changed to plexdrive by changing only PLEXDRIVE==TRUE anloter value
-				export RCLONE_MOUNT_REMOTE_PATH=$PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH
-				echo "note: PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH env variable is defined and PLEXDRIVE == $PLEXDRIVE . Assigning PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH value $RCLONE_MOUNT_REMOTE_PATH to RCLONE_MOUNT_REMOTE_PATH"
-			fi
-		else
+		if ! [ -z "${PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH}" ]; then
+			#allows users to define a different RCLONE_MOUNT_REMOTE_PATH for plexdrive so 
+			#config can be changed to plexdrive by changing only PLEXDRIVE==TRUE anloter value
+			export RCLONE_MOUNT_REMOTE_PATH=$PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH
+			echo "note: PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH env variable is defined and PLEXDRIVE == $PLEXDRIVE . Assigning PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH value $RCLONE_MOUNT_REMOTE_PATH to RCLONE_MOUNT_REMOTE_PATH"
+		fi
+	else
+		if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
 			# set default values to use for rclone
 			export RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --dir-cache-time 24h --multi-thread-streams=20 "
+			echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
 		fi
-		echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
 	fi
 
 	if [ -z "${RCLONE_CONFIG}" ]; then
