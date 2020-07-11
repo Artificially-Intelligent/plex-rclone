@@ -52,4 +52,5 @@ else
 
     echo "creating symbolic link from $DRIVE_MOUNT_CONTAINER_PATH to $MEDIA_MOUNT_CONTAINER_PATH"
     ln -sf $DRIVE_MOUNT_CONTAINER_PATH $MEDIA_MOUNT_CONTAINER_PATH
+    chown -h abc:users $MEDIA_MOUNT_CONTAINER_PATH
 fi
