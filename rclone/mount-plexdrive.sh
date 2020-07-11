@@ -92,7 +92,17 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
 	# set default values to use for rclone crypt over plexdrive mount
     
     if [ -z "${PLEXDRIVE_RCLONE_MOUNT_OPTIONS}" ]; then
-        PLEXDRIVE_RCLONE_MOUNT_OPTIONS=" --read-only "
+
+		if [ ! -z "${PUID}" ]; then
+			# mount as plex user
+			ASSIGN_PUID=" --uid $PUID "
+		fi
+		if [ ! -z "${PGID}" ]; then
+			# mount as plex user group
+			ASSIGN_PGID=" --gid $PGID "
+		fi
+
+        PLEXDRIVE_RCLONE_MOUNT_OPTIONS=" --read-only $ASSIGN_PUID $ASSIGN_PGID "
         echo "note: PLEXDRIVE_RCLONE_MOUNT_OPTIONS env variable not is defined. Assigning default value PLEXDRIVE_RCLONE_MOUNT_OPTIONS=$PLEXDRIVE_RCLONE_MOUNT_OPTIONS"
     fi
     if [ -z "${PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH}" ]; then
