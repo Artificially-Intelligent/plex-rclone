@@ -62,17 +62,18 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
     if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
         # set default values to use for rclone
 
-		if [ ! -z "${PUID}" ]; then
-			# mount as plex user
-			ASSIGN_PUID=" --uid $PUID "
-		fi
-		if [ ! -z "${PGID}" ]; then
-			# mount as plex user group
-			ASSIGN_PGID=" --gid $PGID "
-		fi
         export RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --dir-cache-time 24h --multi-thread-streams=20 $ASSIGN_PUID $ASSIGN_PGID "
         echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
     fi
+	
+	if [ ! -z "${PUID}" ]; then
+		# mount as plex user
+		export RCLONE_MOUNT_OPTIONS="$RCLONE_MOUNT_OPTIONS --uid $PUID "
+	fi
+	if [ ! -z "${PGID}" ]; then
+		# mount as plex user group
+		export RCLONE_MOUNT_OPTIONS="$RCLONE_MOUNT_OPTIONS --gid $PGID "
+	fi
 
 	if [ -z "${RCLONE_CONFIG}" ]; then
 		export RCLONE_CONFIG=/config/rclone/rclone.conf
