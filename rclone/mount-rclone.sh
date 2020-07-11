@@ -1,4 +1,34 @@
 #!/usr/bin/with-contenv bash
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -o | --mount-options )           shift
+                                RCLONE_MOUNT_OPTIONS=$1
+                                ;;
+        -p | --container-path )           shift
+                                RCLONE_MOUNT_CONTAINER_PATH=$1
+                                ;;
+        -r | --remote-path)           shift
+                                RCLONE_MOUNT_REMOTE_PATH=$1
+                                ;;
+        -g | --gui-port )           shift
+                                RCLONE_GUI_PORT=$1
+                                ;;
+        -p | --serve-port )           shift
+                                RCLONE_SERVE_PORT=$1
+                                ;;
+        -s | --serve-gui-port )           shift
+                                RCLONE_SERVE_GUI_PORT=$1
+                                ;;
+        -h | --help )           usage
+                                exit
+                                ;;
+        * )                     usage
+                                exit 1
+    esac
+    shift
+done
+
 if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE == "False" ]] ; then 
 	if [ -z "${RCLONE_MOUNT_CONTAINER_PATH}" ]; then
 		export RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone
@@ -7,12 +37,12 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 
 	if [[ $RCLONE_GUI == "TRUE" || $RCLONE_GUI == "true" || $RCLONE_GUI == "1" || $RCLONE_GUI == "True" ]]; then	
 		if [ -z "${RCLONE_GUI_PORT}" ]; then
-			RCLONE_GUI_PORT=13668
+			RCLONE_GUI_PORT=13666
 			echo "note: RCLONE_GUI_PORT env variable not defined. Assigning default port: $RCLONE_GUI_PORT"
 		fi
 		
 		if [ -z "${RCLONE_SERVE_GUI_PORT}" ]; then
-			RCLONE_SERVE_GUI_PORT=13669
+			RCLONE_SERVE_GUI_PORT=13667
 			echo "note: RCLONE_SERVE_GUI_PORT env variable not defined. Assigning default port: $RCLONE_SERVE_GUI_PORT"
 		fi
 
@@ -20,7 +50,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 			RCLONE_GUI_USER=rclone
 			echo "note: RCLONE_GUI_USER env variable not defined. Assigning default user: $RCLONE_GUI_USER"
 		fi
-
+		
 		if [ -z "${RCLONE_GUI_PASSWORD}" ]; then
 			RCLONE_GUI_PASSWORD=rclone
 			echo "note: RCLONE_GUI_PASSWORD env variable not defined. Assigning default password: $RCLONE_GUI_PASSWORD"
@@ -29,24 +59,11 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		RCLONE_SERVE_GUI_CONFIG=" --rc --rc-web-gui --rc-addr :$RCLONE_SERVE_GUI_PORT --rc-user=$RCLONE_GUI_USER --rc-pass=$RCLONE_GUI_PASSWORD --rc-serve "
 	fi
 
-	
-	if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]]; then
-		# set default values to use for rclone crypt over plexdrive mount
-		export RCLONE_MOUNT_OPTIONS=" --max-read-ahead 131072 --read-only "
-
-		if ! [ -z "${PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH}" ]; then
-			#allows users to define a different RCLONE_MOUNT_REMOTE_PATH for plexdrive so 
-			#config can be changed to plexdrive by changing only PLEXDRIVE==TRUE anloter value
-			export RCLONE_MOUNT_REMOTE_PATH=$PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH
-			echo "note: PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH env variable is defined and PLEXDRIVE == $PLEXDRIVE . Assigning PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH value $RCLONE_MOUNT_REMOTE_PATH to RCLONE_MOUNT_REMOTE_PATH"
-		fi
-	else
-		if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
-			# set default values to use for rclone
-			export RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --dir-cache-time 24h --multi-thread-streams=20 "
-			echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
-		fi
-	fi
+    if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
+        # set default values to use for rclone
+        export RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --dir-cache-time 24h --multi-thread-streams=20 "
+        echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
+    fi
 
 	if [ -z "${RCLONE_CONFIG}" ]; then
 		export RCLONE_CONFIG=/config/rclone/rclone.conf
@@ -55,49 +72,11 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 	RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
 	mkdir -p $RCLONE_CONFIG_DIR
 
-	if ! [ -z "$RCLONE_CONFIG_URL" ] ; then
-        echo "RCLONE_CONFIG_URL defined. Attempting to download latest config file"
-        curl -L -o ./rclone.conf $RCLONE_CONFIG_URL 
-        # /usr/bin/gdown.pl $RCLONE_CONFIG_URL ./rclone.conf
-        
-        if [ -f "./rclone.conf" ]; then
-            echo "note: rclone.conf downloaded sucessfully. Overwriting $RCLONE_CONFIG with dowloaded config file."
-            mv ./rclone.conf $RCLONE_CONFIG
-		else
-			echo "note: rclone.conf download not found."
-			ls -la ./
-        fi
-    fi
-
-	if [ ! -f "${RCLONE_CONFIG}" ]; then
+    if [ ! -f "${RCLONE_CONFIG}" ]; then
 		GENERIC_RCLONE_CONFIG=/root/.config/rclone/rclone.conf
-		echo "note: Rclone config file $RCLONE_CONFIG doesn't exist, generating a generic file $GENERIC_RCLONE_CONFIG to be used instead. Configurations for use with this file need to be configured using environment variables. See https://rclone.org/crypt/ and detailed instructions links at https://rclone.org/docs/ for details."
+		echo "note: Rclone config file $RCLONE_CONFIG doesn't exist, using a generic file $GENERIC_RCLONE_CONFIG instead. Configurations for use with this file need to be configured using environment variables. See https://rclone.org/crypt/ and detailed instructions links at https://rclone.org/docs/ for details."
 		RCLONE_CONFIG=$GENERIC_RCLONE_CONFIG
-		RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
-		mkdir -p $RCLONE_CONFIG_DIR
-		
-		cat << EOT > $RCLONE_CONFIG
-[REMOTE]
-type = drive
-
-[CRYPT]
-type = crypt
-EOT
-		if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]] ; then 
-			if [ -z "${PLEXDRIVE_MOUNT_CONTAINER_PATH}" ]; then
-				# duplicated from mount-plexdrive.sh as changes made there not accessible
-				PLEXDRIVE_MOUNT_CONTAINER_PATH=/mnt/plexdrive/
-			fi
-			echo "remote = $PLEXDRIVE_MOUNT_CONTAINER_PATH" >> $RCLONE_CONFIG
-		else
-			echo "remote = REMOTE:" >> $RCLONE_CONFIG
-		fi
-
-		echo "note: generic rclone config file $RCLONE_CONFIG contents:"
-		cat $RCLONE_CONFIG
-
-		echo "If you want to replace this with a differnt file, mount a volume containing a rclong.conf file and/or setup a new rclone.conf by running the command (replacing plex-rclone with your container name if different) ' docker exec -it plex-rclone rclone config --config $RCLONE_CONFIG ' Create a 'new remote' named $RCLONE_MOUNT_REMOTE_PATH  (without the : and any text following it), or add the name you choose followed by : to enviroment variable RCLONE_MOUNT_REMOTE_PATH"
-	fi
+    fi
 
 	if [ -z "${RCLONE_MOUNT_REMOTE_PATH}" ]; then
 		export RCLONE_MOUNT_REMOTE_PATH="CRYPT:"
@@ -116,8 +95,6 @@ EOT
 	echo "Starting rclone: rclone $RCLONE_COMMAND"
 	rclone $RCLONE_COMMAND &
 fi
-
-
 
 # start rclone serve
 if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
@@ -189,11 +166,3 @@ if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
 fi
 echo " "
 echo -------------------------------------
-
-
-# if ! [ -z "${NFS_CLIENT}" ]; then	
-# 	# export nfs share
-# 	echo "creating nfs share with export: $RCLONE_MOUNT_CONTAINER_PATH $NFS_CLIENT(ro,sync,no_subtree_check)"
-# 	echo "$RCLONE_MOUNT_CONTAINER_PATH *(ro,sync,no_subtree_check)" >> /etc/exports
-# 	exportfs -a
-# fi

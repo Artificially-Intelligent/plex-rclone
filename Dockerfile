@@ -64,14 +64,20 @@ RUN echo "**** install plexdrive 5.1.0 - latest available 2020-06-10 ****" && \
  # Copy gdrive file downloader script
 COPY gdown.pl /usr/bin/gdown.pl
 
- 
-  # Copy rcone startup script to init.d
-COPY rclone/mount-plexdrive.sh /etc/cont-init.d/30-mount-plexdrive
-COPY rclone/mount-rclone.sh /etc/cont-init.d/31-mount-rclone
+ # Copy plex_media_scanner.sh into place ready for /etc/cont-init.d/48-replace-plex-media-scanner
+COPY rclone/plex-media-scanner.sh /usr/bin/plex_media_scanner.sh
+
+# Copy rcone startup script to init.d
+COPY rclone/create-rclone-config.sh /etc/cont-init.d/30-create-rclone-config
+COPY rclone/mount-plexdrive.sh /etc/cont-init.d/31-mount-plexdrive
+COPY rclone/mount-rclone.sh /etc/cont-init.d/32-mount-rclone
+COPY rclone/link-to-active-mount.sh /etc/cont-init.d/33-link-to-active-mount
+
 COPY rclone/plex-options.sh /etc/cont-init.d/46-plex-options
 COPY rclone/plex-library-from-master.sh /etc/cont-init.d/47-plex-library-from-master
+COPY rclone/replace-plex-media-scanner.sh /etc/cont-init.d/48-replace-plex-media-scanner
 
-RUN  chmod +x /etc/cont-init.d/* /usr/bin/gdown.pl
+RUN  chmod +x /etc/cont-init.d/* /usr/bin/gdown.pl /usr/bin/plex_media_scanner.sh
 
 WORKDIR /data
 ENV XDG_CONFIG_HOME=/config

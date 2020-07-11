@@ -1,4 +1,7 @@
 #!/usr/bin/with-contenv bash
+
+echo_and_run() { echo "$*" ; "$@" ; }
+
 if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]] ; then 
     echo "PLEXDRIVE == TRUE - plexdrive mount will be attempted prior to rclone"
 
@@ -17,12 +20,6 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
         PLEXDRIVE_MOUNT_OPTIONS=" $PLEXDRIVE_MOUNT_OPTIONS --drive-id=$RCLONE_DRIVE_TEAM_DRIVE "
         echo "note: RCLONE_DRIVE_TEAM_DRIVE env variable defined. Adding --drive-id=$RCLONE_DRIVE_TEAM_DRIVE to plexdrive options"
     fi
-
-    # #Rclone default options for use with plexdrive mounts
-    # if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
-	# 	export RCLONE_MOUNT_OPTIONS=" --allow-other --max-read-ahead 131072 --read-only "
-	# 	echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
-	# fi
     
     if [ -z "${PLEXDRIVE_CONFIG_PATH}" ]; then
         PLEXDRIVE_CONFIG_PATH=/config/plexdrive/
@@ -82,7 +79,6 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
     mkdir -p "$PLEXDRIVE_MOUNT_CONTAINER_PATH";
     chown -R abc:abc $PLEXDRIVE_MOUNT_CONTAINER_PATH;
 
-    # start PLEXDRIVE
     if [ -z "${PLEXDRIVE_COMMAND}" ]; then
         PLEXDRIVE_COMMAND="mount $PLEXDRIVE_MOUNT_OPTIONS $PLEXDRIVE_MOUNT_CONTAINER_PATH"
     fi
@@ -90,4 +86,44 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
     # start PLEXDRIVE
     echo "Starting PLEXDRIVE: plexdrive $PLEXDRIVE_COMMAND"
     plexdrive $PLEXDRIVE_COMMAND &
+
+    ############ Decrypt Plexdrive with RCLONE #####################
+
+	# set default values to use for rclone crypt over plexdrive mount
+    
+    if [ -z "${PLEXDRIVE_RCLONE_MOUNT_OPTIONS}" ]; then
+        PLEXDRIVE_RCLONE_MOUNT_OPTIONS=" --read-only "
+        echo "note: PLEXDRIVE_RCLONE_MOUNT_OPTIONS env variable not is defined. Assigning default value PLEXDRIVE_RCLONE_MOUNT_OPTIONS=$PLEXDRIVE_RCLONE_MOUNT_OPTIONS"
+    fi
+    if [ -z "${PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH}" ]; then
+        #allows users to define a different RCLONE_MOUNT_REMOTE_PATH for plexdrive so 
+        #config can be changed to plexdrive by changing only PLEXDRIVE==TRUE anloter value
+        PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH="PLEXDRIVE_CRYPT:"
+        echo "note: PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH env variable not is defined. Assigning default value PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH=$PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH"
+    fi
+    if [ -z "${PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH}" ]; then
+        export PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH=/mnt/plexdrive_decrypted
+        echo "note: PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH env variable not defined. Assigning default path: $PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH"
+    fi
+    
+    mkdir -p "$PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH";
+    chown -R abc:abc $PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH;
+
+    export RCLONE_MOUNT_OPTIONS=$PLEXDRIVE_RCLONE_MOUNT_OPTIONS
+    export RCLONE_MOUNT_CONTAINER_PATH=$PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH
+    export RCLONE_MOUNT_REMOTE_PATH=$PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH
+    export RCLONE_GUI_PORT=13671
+    export RCLONE_SERVE_PORT=13672
+    export RCLONE_SERVE_GUI_PORT=13673
+
+    RCLONE_MOUNT_SCRIPT=`find "/etc/cont-init.d/" -name *mount-rclone*`
+    RCLONE_MOUNT_SCRIPT_COMMAND="--mount-options '$PLEXDRIVE_RCLONE_MOUNT_OPTIONS' \
+    --container-path $PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH \
+    --remote-path $PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH \
+    --gui-port 13671 \
+    --serve-port 13672 \
+    --serve-gui-port 13673"
+
+    echo "starting script to setup rclone crypt for plexdrive mount. command: $RCLONE_MOUNT_SCRIPT $RCLONE_MOUNT_SCRIPT_COMMAND"
+    eval $RCLONE_MOUNT_SCRIPT $RCLONE_MOUNT_SCRIPT_COMMAND
 fi
