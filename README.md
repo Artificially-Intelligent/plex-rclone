@@ -171,15 +171,19 @@ volumes:
 <td>Required for rclone mount to function. </td>
 </tr>
 <tr>
+<td align="center"><code>-e MEDIA_MOUNT_CONTAINER_PATH=/plex/media</code></td>
+<td>Path inside container where rclone / plexdrive mount is linked to. This is the path that should be used by plex. If using plexdrive it will attempt to swap to use rclone was start of a media scan and swap back after scanning is done</td>
+</tr>
+<tr>
 <td align="center"><code>-e RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone</code></td>
-<td>for path inside container where rclone share is mounted.</td>
+<td>Path inside container where rclone share is mounted.</td>
 </tr>
 <tr>
 <td align="center"><code>-e RCLONE_MOUNT_REMOTE_PATH="CRYPT:"</code></td>
-<td>for selecting which remote defined in rclone.conf to use for mounting.</td>
+<td>For selecting which remote defined in rclone.conf to use for mounting.</td>
 </tr>
 <tr>
-<td align="center"><code>-e RCLONE_MOUNT_OPTIONS="  --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h "</code></td>
+<td align="center"><code>-e RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --use-json-log --dir-cache-time 24h "</code></td>
 <td>Options added to the rclone mount command. For more details see <a>https://rclone.org/commands/rclone_mount/</a></td>
 </tr>
 <tr>

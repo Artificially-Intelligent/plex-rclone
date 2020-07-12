@@ -115,24 +115,36 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
         export PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH=/mnt/plexdrive_decrypted
         echo "note: PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH env variable not defined. Assigning default path: $PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH"
     fi
-    
+    if [ -z "${PLEXDRIVE_RCLONE_GUI_PORT}" ]; then
+        export PLEXDRIVE_RCLONE_GUI_PORT=13671
+        echo "note: PLEXDRIVE_RCLONE_GUI_PORT env variable not defined. Assigning default port: $PLEXDRIVE_RCLONE_GUI_PORT"
+    fi
+    if [ -z "${PLEXDRIVE_RCLONE_SERVE_PORT}" ]; then
+        export PLEXDRIVE_RCLONE_SERVE_PORT=13672
+        echo "note: PLEXDRIVE_RCLONE_SERVE_PORT env variable not defined. Assigning default path: $PLEXDRIVE_RCLONE_SERVE_PORT"
+    fi
+    # if [ -z "${PLEXDRIVE_RCLONE_SERVE_GUI_PORT}" ]; then
+    #     export PLEXDRIVE_RCLONE_SERVE_GUI_PORT=13673
+    #     echo "note: PLEXDRIVE_RCLONE_SERVE_GUI_PORT env variable not defined. Assigning default path: $PLEXDRIVE_RCLONE_SERVE_GUI_PORT"
+    # fi
+
     mkdir -p "$PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH";
     chown -R abc:abc $PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH;
 
-    export RCLONE_MOUNT_OPTIONS=$PLEXDRIVE_RCLONE_MOUNT_OPTIONS
-    export RCLONE_MOUNT_CONTAINER_PATH=$PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH
-    export RCLONE_MOUNT_REMOTE_PATH=$PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH
-    export RCLONE_GUI_PORT=13671
-    export RCLONE_SERVE_PORT=13672
-    export RCLONE_SERVE_GUI_PORT=13673
+    # export RCLONE_MOUNT_OPTIONS=$PLEXDRIVE_RCLONE_MOUNT_OPTIONS
+    # export RCLONE_MOUNT_CONTAINER_PATH=$PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH
+    # export RCLONE_MOUNT_REMOTE_PATH=$PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH
+    # export RCLONE_GUI_PORT=$PLEXDRIVE_RCLONE_GUI_PORT
+    # export RCLONE_SERVE_PORT=$PLEXDRIVE_RCLONE_SERVE_PORT
+    # export RCLONE_SERVE_GUI_PORT=$PLEXDRIVE_RCLONE_SERVE_GUI_PORT
 
     RCLONE_MOUNT_SCRIPT=`find "/etc/cont-init.d/" -name *mount-rclone*`
     RCLONE_MOUNT_SCRIPT_COMMAND="--mount-options '$PLEXDRIVE_RCLONE_MOUNT_OPTIONS' \
-    --container-path $PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH \
-    --remote-path $PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH \
-    --gui-port 13671 \
-    --serve-port 13672 \
-    --serve-gui-port 13673"
+    --container-path '$PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH' \
+    --remote-path '$PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH' \
+    --gui-port '$PLEXDRIVE_RCLONE_GUI_PORT' \
+    --serve-port '$PLEXDRIVE_RCLONE_SERVE_PORT' \
+    --serve-gui-port '$PLEXDRIVE_RCLONE_SERVE_GUI_PORT'"
 
     echo "starting script to setup rclone crypt for plexdrive mount. command: $RCLONE_MOUNT_SCRIPT $RCLONE_MOUNT_SCRIPT_COMMAND"
     eval $RCLONE_MOUNT_SCRIPT $RCLONE_MOUNT_SCRIPT_COMMAND
