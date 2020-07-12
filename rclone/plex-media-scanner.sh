@@ -7,8 +7,8 @@ eval "$SWAP_MOUNT_SCRIPT --rclone"
 
 # Run Plex Media Scanner with all arguments
 echo "running command: /usr/lib/plexmediaserver/Plex\ Media\ Scanner-real $@"
-{/usr/lib/plexmediaserver/Plex\ Media\ Scanner-real $@ } || {
-    echo "Plex Meia Scanner finised with error"
+/usr/lib/plexmediaserver/Plex\ Media\ Scanner-real $@ || {
+    echo "Plex Media Scanner finised with error"
     eval "$SWAP_MOUNT_SCRIPT"
 }
 
