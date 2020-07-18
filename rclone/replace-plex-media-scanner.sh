@@ -1,4 +1,9 @@
 #!/usr/bin/with-contenv bash
+plex_media_scanner_bin="/usr/lib/plexmediaserver/Plex Media Scanner"
+moved_plex_media_scanner_bin="$plex_media_scanner_bin-real"
 
-mv /usr/lib/plexmediaserver/Plex\ Media\ Scanner /usr/lib/plexmediaserver/Plex\ Media\ Scanner-real
-cp /usr/bin/plex_media_scanner.sh /usr/lib/plexmediaserver/Plex\ Media\ Scanner
+if ! [ -f "$moved_plex_media_scanner_bin" ]; then
+    echo "moving Plex Media Scanner and replacing with mount script which passes though calls to new location"
+    mv "$plex_media_scanner_bin" "$moved_plex_media_scanner_bin"
+    cp /usr/bin/plex_media_scanner.sh "$plex_media_scanner_bin"
+fi
