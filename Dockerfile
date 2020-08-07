@@ -75,7 +75,8 @@ COPY rclone/link-to-active-mount.sh /etc/cont-init.d/33-link-to-active-mount
 
 COPY rclone/plex-options.sh /etc/cont-init.d/46-plex-options
 COPY rclone/plex-library-from-master.sh /etc/cont-init.d/47-plex-library-from-master
-COPY rclone/replace-plex-media-scanner.sh /etc/cont-init.d/48-replace-plex-media-scanner
+
+COPY rclone/replace-plex-media-scanner.sh /etc/cont-init.d/61-replace-plex-media-scanner
 
 RUN  chmod +x /etc/cont-init.d/* /usr/bin/gdown.pl /usr/bin/plex_media_scanner.sh
 
