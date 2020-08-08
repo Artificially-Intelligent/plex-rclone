@@ -5,8 +5,8 @@ SWAP_MOUNT_SCRIPT=`find "/etc/cont-init.d/" -name *link-to-active-mount*`
 # create a scanner file to track active scanners
 scanner_folder=/plex/scanners
 mkdir -p $scanner_folder
-scanner_file=$scanner_folder/scanner_$(date +"%s")
-echo "" > $scanner_file
+scanner_file="$scanner_folder/Plex_Media_Scanner-"$(date +"%s")
+echo "$@" > $scanner_file
 
 # Set media mount to use rclone, plexdrive setup for read ahead is very wastefull during library scans
 eval "$SWAP_MOUNT_SCRIPT --rclone"
