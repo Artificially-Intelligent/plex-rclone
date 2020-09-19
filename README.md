@@ -149,6 +149,10 @@ volumes:
 <td align="center"><code>-e PLEX_LIBRARY_MASTER_PATH=/mnt/rclone/Storage/plex-library.tar.gz</code></td>
 <td>Local path to tar.gz file containing master copy of plex library. If PLEX_LIBRARY_MASTER_PATH is defined and file at the path is found that is newer than prior versions loaded, tar contents will be extracted and existing library overwirtten.</td>
 </tr>
+<tr>
+<td align="center"><code>-e customConnections=http://192.168.1.1:32400</code></td>
+<td>Passes a default value to customConnections in Plex Prefrences.xml. Defining customConnections helps clients discover plex servers in situations where build in discovery methods dont work, ie clients anywhere outside the subnet the plex server is hosted within as is the case with Docker's bridge networking in effect. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
 
 </tbody>
 </table>
