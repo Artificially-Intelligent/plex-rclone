@@ -70,3 +70,10 @@ if ! grep -qs "RelayEnabled" "$PREFNAME" && ! [ -z "$RelayEnabled" ]; then
 	echo "RelayEnabled defined, adding RelayEnabled=$RelayEnabled to $PREFNAME"
 	sed -i "s|/>| RelayEnabled=\"${RelayEnabled}\"\/>|g" "${PREFNAME}"
 fi
+if ! grep -qs "customConnections" "$PREFNAME" && ! [ -z "$customConnections" ]; then
+	echo "customConnections defined, adding customConnections=$customConnections to $PREFNAME"
+	sed -i "s|/>| customConnections=\"${customConnections}\"\/>|g" "${PREFNAME}"
+if ! grep -qs "customConnections" "$PREFNAME" && ! [ -z "$ADVERTISE_IP" ]; then
+	echo "ADVERTISE_IP defined, adding customConnections=$ADVERTISE_IP to $PREFNAME"
+	sed -i "s|/>| customConnections=\"${ADVERTISE_IP}\"\/>|g" "${PREFNAME}"
+fi
