@@ -87,3 +87,6 @@ ENV RCLONE_GUI_PORT=13668
 ENV RCLONE_SERVE_GUI_PORT=13669
 ENV RCLONE_GUI_USER=rclone
 ENV RCLONE_GUI_PASSWORD=rclone
+
+HEALTHCHECK --interval=5m --timeout=3s \
+  CMD [ -f /plex/media/mountcheck ] || exit 1
