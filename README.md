@@ -153,7 +153,75 @@ volumes:
 <td align="center"><code>-e customConnections=http://192.168.1.1:32400</code></td>
 <td>Passes a default value to customConnections in Plex Prefrences.xml. Defining customConnections helps clients discover plex servers in situations where build in discovery methods dont work, ie clients anywhere outside the subnet the plex server is hosted within as is the case with Docker's bridge networking in effect. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
 </tr>
-
+<tr>
+<td align="center"><code>-e allowedNetworks=192.168.0.0/16,172.16.0.0/12,10.0.0.0/8</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. Defining allowedNetworks helps with inital server setup as it allows network subnets to be defined where authentication isn't required. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>>
+<tr>
+<td align="center"><code>-e FriendlyName=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<tr>
+<td align="center"><code>-e autoEmptyTrash=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e ButlerEndHour=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e ButlerStartHour=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e ButlerTaskDeepMediaAnalysis=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e ButlerTaskUpgradeMediaAnalysis=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e DlnaEnabled=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e GenerateChapterThumbBehavior=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e LoudnessAnalysisBehavior=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e ScheduledLibraryUpdateInterval=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e ScheduledLibraryUpdatesEnabled=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e ButlerTaskRefreshLibraries=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e TranscoderTempDirectory=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e LanNetworksBandwidth=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e TreatWanIpAsLocal=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a>https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
+<tr>
+<td align="center"><code>-e RelayEnabled=</code></td>
+<td>Passes a default value to associated entry in Plex Prefrences.xml. See <a href="https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/#toc-1">https://support.plex.tv/articles/201105343-advanced-hidden-server-settings</a> for specifics and valid vaules to enter. Note this will not update the values or have any impact after it is initally set/unset via this variable or via Plex.</td>
+</tr>
 </tbody>
 </table>
 
@@ -169,7 +237,7 @@ volumes:
 <tbody>
 <tr>
 <td align="center"><code>--cap-add SYS_ADMIN --device /dev/fuse</code></td>
-<td>Reenables all system capabilityies usually removed from docker containers, required for rclone mount to function. <a>https://opensource.com/business/14/9/security-for-docker</a> <a> https://lwn.net/Articles/486306/</a></td>
+<td>Reenables all system capabilityies usually removed from docker containers, required for rclone mount to function. <a href="https://opensource.com/business/14/9/security-for-docker">https://opensource.com/business/14/9/security-for-docker</a> <a href="https://lwn.net/Articles/486306/">https://lwn.net/Articles/486306/</a></td>
 </tr>
 <td align="center"><code>--device /dev/fuse</code></td>
 <td>Required for rclone mount to function. </td>
