@@ -91,4 +91,4 @@ ENV DO_HEALTH_CHECK=true
 
 # Check to see if active rclone or plexdrive mount is connected properly by checking MEDIA_MOUNT_CONTAINER_PATH for if any files are present
 HEALTHCHECK --interval=5m --timeout=3s \
-  CMD $DO_HEALTH_CHECK || curl -f http://localhost:32400/ && ([ "$(ls -A $MEDIA_MOUNT_CONTAINER_PATH)"  ] || [ "$(ls -A /plex/media/)" ]) ||  exit 1
+  CMD ! $DO_HEALTH_CHECK || [ "$(ls -A $MEDIA_MOUNT_CONTAINER_PATH)"  ] || [ "$(ls -A /plex/media/)" ] ||  exit 1
