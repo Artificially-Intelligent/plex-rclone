@@ -245,6 +245,10 @@ volumes:
 <tr>
 <td align="center"><code>-e MEDIA_MOUNT_CONTAINER_PATH=/plex/media</code></td>
 <td>Path inside container where rclone / plexdrive mount is linked to. This is the path that should be used by plex. If using plexdrive it will attempt to swap to use rclone was start of a media scan and swap back after scanning is done</td>
+</tr
+<tr>
+<td align="center"><code>-e DO_HEALTH_CHECK=true</code></td>
+<td>By default a health check is run to confirm that plex is running and that MEDIA_MOUNT_CONTAINER_PATH contains files (i.e. rclone/plexdrive shares are mounted correctly). Repreated failures with cause the container to restart. To disable this behaviour set DO_HEALTH_CHECK=false</td>
 </tr>
 <tr>
 <td align="center"><code>-e RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone</code></td>
