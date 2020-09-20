@@ -87,7 +87,8 @@ ENV RCLONE_GUI_PORT=13668
 ENV RCLONE_SERVE_GUI_PORT=13669
 ENV RCLONE_GUI_USER=rclone
 ENV RCLONE_GUI_PASSWORD=rclone
+ENV DO_HEALTH_CHECK=true
 
 # Check to see if active rclone or plexdrive mount is connected properly by checking MEDIA_MOUNT_CONTAINER_PATH for if any files are present
 HEALTHCHECK --interval=5m --timeout=3s \
-  CMD [ "$(ls -A $MEDIA_MOUNT_CONTAINER_PATH)"  ] || [ "$(ls -A /plex/media/)" ] ||  exit 1
+  CMD $DO_HEALTH_CHECK || curl -f http://localhost:32400/ && ([ "$(ls -A $MEDIA_MOUNT_CONTAINER_PATH)"  ] || [ "$(ls -A /plex/media/)" ]) ||  exit 1
