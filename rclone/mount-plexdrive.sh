@@ -5,6 +5,12 @@ echo_and_run() { echo "$*" ; "$@" ; }
 if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]] ; then 
     echo "PLEXDRIVE == TRUE - plexdrive mount will be attempted prior to rclone"
 
+    if ! [ -z "${RCLONE_CONFIG_PASS}" ] || ! [ -z "${OP}" ] ; then
+        if [ -z "${RCLONE_CONFIG_PASS}" ] ; then
+            export RCLONE_CONFIG_PASS=$(rclone reveal $OP)
+        fi
+        RCLONE_CONFIG_EXPORT=$(rclone config show --config /root/.config/rclone/rclone.conf)
+    fi
 
     if [ -z "${PLEXDRIVE_MOUNT_CONTAINER_PATH}" ]; then
         PLEXDRIVE_MOUNT_CONTAINER_PATH=/mnt/plexdrive
@@ -15,10 +21,14 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
         PLEXDRIVE_MOUNT_OPTIONS=" -o read_only -v 2 --max-chunks=10 --chunk-size=20M --chunk-check-threads=20 --chunk-load-threads=3 --chunk-load-ahead=4 "
         echo "note: PLEXDRIVE_MOUNT_OPTIONS env variable not defined. Assigning default options: $PLEXDRIVE_MOUNT_OPTIONS"
     fi
+    
+    if [ -z "${RCLONE_DRIVE_TEAM_DRIVE}" ]; then
+        RCLONE_DRIVE_TEAM_DRIVE=$(echo $RCLONE_CONFIG_EXPORT | grep team_drive | sed -e 's#.*team_drive = \(\)#\1#' | cut -d' ' -f 1)
+    fi
 
     if ! [ -z "${RCLONE_DRIVE_TEAM_DRIVE}" ]; then
         PLEXDRIVE_MOUNT_OPTIONS=" $PLEXDRIVE_MOUNT_OPTIONS --drive-id=$RCLONE_DRIVE_TEAM_DRIVE "
-        echo "note: RCLONE_DRIVE_TEAM_DRIVE env variable defined. Adding --drive-id=$RCLONE_DRIVE_TEAM_DRIVE to plexdrive options"
+        echo "note: RCLONE_DRIVE_TEAM_DRIVE env variable defined. Adding --drive-id=$RCLONE_DRIVE_TEAM_DRIVE to plexdrive options"  
     fi
     
     if [ -z "${PLEXDRIVE_CONFIG_PATH}" ]; then
@@ -52,13 +62,6 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
                 mv ./cache.bolt ${PLEXDRIVE_CONFIG_PATH}cache.bolt
             fi
         fi
-    fi
-
-    if ! [ -z "${RCLONE_CONFIG_PASS}" ] || ! [ -z "${OP}" ] ; then
-        if [ -z "${RCLONE_CONFIG_PASS}" ] ; then
-            export RCLONE_CONFIG_PASS=$(rclone reveal $OP)
-        fi
-        RCLONE_CONFIG_EXPORT=$(rclone config show --config /root/.config/rclone/rclone.conf)
     fi
 
     if ! [ -z "${PLEXDRIVE_TOKEN_JSON}" ]; then
