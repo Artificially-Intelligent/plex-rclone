@@ -70,7 +70,7 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
             echo "note: RCLONE_CONFIG_REMOTE_TOKEN env variable defined. Replacing ${PLEXDRIVE_CONFIG_PATH}token.json with variable contents"
         else
             if ! [ -z "${RCLONE_CONFIG_EXPORT}" ]; then
-                echo $RCLONE_CONFIG_EXPORT | grep token | sed -e 's#.*= \(\)#\1#' > ${PLEXDRIVE_CONFIG_PATH}token.json
+                echo $RCLONE_CONFIG_EXPORT | grep token | sed -e 's#.*token = \(\)#\1#' | cut -d' ' -f 1 > ${PLEXDRIVE_CONFIG_PATH}token.json
             fi
         fi
     fi
@@ -80,8 +80,8 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
         echo "note: PLEXDRIVE_CONFIG_JSON env variable defined. Replacing ${PLEXDRIVE_CONFIG_PATH}config.json with variable contents"
     else
         if ! [ -z "${RCLONE_CONFIG_EXPORT}" ] && ( [ -z "${RCLONE_DRIVE_CLIENT_ID}" ] || [ -z "${RCLONE_DRIVE_CLIENT_SECRET}" ] ) ; then
-            RCLONE_DRIVE_CLIENT_ID=$(echo $RCLONE_CONFIG_EXPORT | grep client_id | sed -e 's#.*= \(\)#\1#')
-            RCLONE_DRIVE_CLIENT_SECRET=$(echo $RCLONE_CONFIG_EXPORT | grep secret | sed -e 's#.*= \(\)#\1#')
+            RCLONE_DRIVE_CLIENT_ID=$(echo $RCLONE_CONFIG_EXPORT | grep client_id | sed -e 's#.*client_id = \(\)#\1#' | cut -d' ' -f 1)
+            RCLONE_DRIVE_CLIENT_SECRET=$(echo $RCLONE_CONFIG_EXPORT | grep secret | sed -e 's#.*secret = \(\)#\1#' | cut -d' ' -f 1)
             QUIET=TRUE
         fi
         if ! [ -z "${RCLONE_DRIVE_CLIENT_ID}" ] && ! [ -z "${RCLONE_DRIVE_CLIENT_SECRET}" ] ; then
