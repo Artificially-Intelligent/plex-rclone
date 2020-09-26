@@ -7,7 +7,7 @@ fi
 RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
 mkdir -p $RCLONE_CONFIG_DIR
 
-if ! [ -z "${RCLONE_CONFIG_ENCRYPTED}" ]  && ! [ -z "${RCLONE_CONFIG_PASS}" ]   ; then
+if ! [ -z "${RCLONE_CONFIG_ENCRYPTED}" ]  && ( ! [ -z "${RCLONE_CONFIG_PASS}" ] || ! [ -z "${OP}" ]  )  ; then
     cat $RCLONE_CONFIG_ENCRYPTED > $RCLONE_CONFIG
     echo "note: RCLONE_CONFIG_ENCRYPTED env variable defined. Applying overwriting rclone config $RCLONE_CONFIG with encrypted config"
 fi

@@ -59,6 +59,14 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		RCLONE_SERVE_GUI_CONFIG=" --rc --rc-web-gui --rc-addr :$RCLONE_SERVE_GUI_PORT --rc-user=$RCLONE_GUI_USER --rc-pass=$RCLONE_GUI_PASSWORD --rc-serve "
 	fi
 
+	if ! [ -z "${RCLONE_CONFIG_PASS}" ] || ! [ -z "${OP}" ] ; then
+		RCLONE_CONFIG_OPTIONS=" --ask-password "
+		if [ -z "${RCLONE_CONFIG_PASS}" ] ; then
+			RCLONE_CONFIG_OPTIONS=" --ask-password --password-command 'rclone reveal $OP' "
+		fi
+	fi
+	
+
     if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
         # set default values to use for rclone
 
@@ -98,12 +106,12 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 
 	# start rclone
 	if [ -z "${RCLONE_COMMAND}" ]; then
-		RCLONE_COMMAND="mount $RCLONE_MOUNT_REMOTE_PATH $RCLONE_MOUNT_CONTAINER_PATH --allow-other --config $RCLONE_CONFIG $RCLONE_MOUNT_OPTIONS $RCLONE_GUI_CONFIG"
+		RCLONE_COMMAND="mount $RCLONE_MOUNT_REMOTE_PATH $RCLONE_MOUNT_CONTAINER_PATH --allow-other  --ask-password=false --config $RCLONE_CONFIG $RCLONE_MOUNT_OPTIONS $RCLONE_GUI_CONFIG"
 	fi
 
 	# start rclone
 	echo "Starting rclone: rclone $RCLONE_COMMAND"
-	rclone $RCLONE_COMMAND &
+	rclone $RCLONE_COMMAND $RCLONE_CONFIG_OPTIONS &
 fi
 
 # start rclone serve
