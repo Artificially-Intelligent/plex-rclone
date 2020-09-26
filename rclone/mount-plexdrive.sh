@@ -85,11 +85,11 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
             QUIET=TRUE
         fi
         if ! [ -z "${RCLONE_DRIVE_CLIENT_ID}" ] && ! [ -z "${RCLONE_DRIVE_CLIENT_SECRET}" ] ; then
-            echo '{"ClientID":"$RCLONE_DRIVE_CLIENT_ID","ClientSecret":"$RCLONE_DRIVE_CLIENT_SECRET"}' > ${PLEXDRIVE_CONFIG_PATH}config.json
+            echo "{'ClientID':'$RCLONE_DRIVE_CLIENT_ID','ClientSecret':'$RCLONE_DRIVE_CLIENT_SECRET'}" > ${PLEXDRIVE_CONFIG_PATH}config.json
             ! [ -z $QUIET ] || echo "note: RCLONE_DRIVE_CLIENT_ID and RCLONE_DRIVE_CLIENT_SECRET env variable defined. Replacing ${PLEXDRIVE_CONFIG_PATH}config.json with variable contents"
         fi
         if ! [ -z "${RCLONE_CONFIG_REMOTE_CLIENT_ID}" ] && ! [ -z "${RCLONE_CONFIG_REMOTE_CLIENT_SECRET}" ] ; then
-            echo '{"ClientID":"$RCLONE_CONFIG_REMOTE_CLIENT_ID","ClientSecret":"$RCLONE_CONFIG_REMOTE_CLIENT_SECRET"}' > ${PLEXDRIVE_CONFIG_PATH}config.json
+            echo "{'ClientID':'$RCLONE_CONFIG_REMOTE_CLIENT_ID','ClientSecret':'$RCLONE_CONFIG_REMOTE_CLIENT_SECRET'}" > ${PLEXDRIVE_CONFIG_PATH}config.json
             ! [ -z $QUIET ] || echo "note: RCLONE_CONFIG_REMOTE_CLIENT_ID and RCLONE_CONFIG_REMOTE_CLIENT_SECRET env variable defined. Replacing ${PLEXDRIVE_CONFIG_PATH}config.json with variable contents"
         fi
     fi
