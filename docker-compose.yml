@@ -21,11 +21,14 @@ services:
       - RCLONE_GUI=TRUE
       - "RCLONE_DRIVE_SCOPE=drive.readonly" # for connection to google drive remote https://rclone.org/drive/ 
       - "RCLONE_DRIVE_TEAM_DRIVE=<your team drive id - can be found in rclone.conf>"
-      - 'RCLONE_DRIVE_SERVICE_ACCOUNT_CREDENTIALS=<your service account json file contents>'
+      - 'RCLONE_CONFIG_REMOTE_CLIENT_ID=<your googledrive client id - optional - can be found in rclone.conf as "client_id">'
+      - 'RCLONE_CONFIG_REMOTE_CLIENT_SECRET=<your secret associated with your googledrive client id - optional - can be found in rclone.conf as "secret">'
+      - 'RCLONE_CONFIG_REMOTE_TOKEN=<your auth token json created with "rclone config" - can be found in rclone.conf as "token">'
       - "RCLONE_CRYPT_PASSWORD=<your encryption password or pass phrase>" # for decrypting remote contents https://rclone.org/crypt/
       - "RCLONE_CRYPT_PASSWORD2=<your encryption password or pass phrase for salt>"
       - "RCLONE_CRYPT_DIRECTORY_NAME_ENCRYPTION=true"
       - "RCLONE_CRYPT_FILENAME_ENCRYPTION=standard"
+      - PLEXDRIVE=TRUE
     volumes:
       - plex_temp:/transcode
       - plex_config:/config
