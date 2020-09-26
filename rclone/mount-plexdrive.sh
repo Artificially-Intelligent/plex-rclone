@@ -56,9 +56,9 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
 
     if ! [ -z "${RCLONE_CONFIG_PASS}" ] || ! [ -z "${OP}" ] ; then
         if [ -z "${RCLONE_CONFIG_PASS}" ] ; then
-            RCLONE_CONFIG_PASS=rclone reveal $OP
+            export RCLONE_CONFIG_PASS=$(rclone reveal $OP)
         fi
-        RCLONE_CONFIG_EXPORT=rclone config show --password $RCLONE_CONFIG_PASS --config /root/.config/rclone/rclone.conf
+        RCLONE_CONFIG_EXPORT=$(rclone config show --config /root/.config/rclone/rclone.conf)
     fi
 
     if ! [ -z "${PLEXDRIVE_TOKEN_JSON}" ]; then
@@ -112,7 +112,7 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
     if [ -z "${PLEXDRIVE_COMMAND}" ]; then
         PLEXDRIVE_COMMAND="mount $PLEXDRIVE_MOUNT_OPTIONS $PLEXDRIVE_MOUNT_CONTAINER_PATH"
     fi
-
+    export RCLONE_CONFIG_PASS=
     # start PLEXDRIVE
     echo "Starting PLEXDRIVE: plexdrive $PLEXDRIVE_COMMAND"
     plexdrive $PLEXDRIVE_COMMAND &
