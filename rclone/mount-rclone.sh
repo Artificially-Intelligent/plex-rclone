@@ -86,6 +86,9 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 	if [ -z "${RCLONE_CONFIG}" ]; then
 		export RCLONE_CONFIG=/config/rclone/rclone.conf
 		echo "note: RCLONE_CONFIG env variable not defined. Assigning default path: $RCLONE_CONFIG"
+		RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
+		
+
 	fi
 	RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
 	mkdir -p $RCLONE_CONFIG_DIR
@@ -93,7 +96,14 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
     if [ ! -f "${RCLONE_CONFIG}" ]; then
 		GENERIC_RCLONE_CONFIG=/root/.config/rclone/rclone.conf
 		echo "note: Rclone config file $RCLONE_CONFIG doesn't exist, using a generic file $GENERIC_RCLONE_CONFIG instead. Configurations for use with this file need to be configured using environment variables. See https://rclone.org/crypt/ and detailed instructions links at https://rclone.org/docs/ for details."
-		RCLONE_CONFIG=$GENERIC_RCLONE_CONFIG
+		RCLONE_CONFIG=$GENERIC_RCLONE_CONFIG	
+		# load values genreated by reconnect-rclone-config.sh if they exist
+		if [ -z $RCLONE_DRIVE_TOKEN ] && [ -f "${RCLONE_CONFIG_DIR}/token.json" ]; then
+            export RCLONE_DRIVE_TOKEN=$(cat ${RCLONE_CONFIG_DIR}/token.json)
+        fi
+        if [ -z $ RCLONE_DRIVE_TEAM_DRIVE ] && [ -f "${RCLONE_CONFIG_DIR}/team_drive.id" ]; then
+            export RCLONE_DRIVE_TEAM_DRIVE=$(cat ${RCLONE_CONFIG_DIR}/team_drive.id)
+        fi
     fi
 
 	if [ -z "${RCLONE_MOUNT_REMOTE_PATH}" ]; then

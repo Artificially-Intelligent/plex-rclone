@@ -29,6 +29,7 @@ RUN \
   perl \
   wget \
   unzip \
+  inotify-tools \
   # rclone dependencies
   ca-certificates \
   fuse \
@@ -38,7 +39,7 @@ RUN \
   nfs-kernel-server \
   && \
   echo "user_allow_other" >> /etc/fuse.conf 
-
+ 
 RUN echo "**** install latest rclone ****" && \
   wget https://downloads.rclone.org/rclone-current-linux-amd64.deb && \
   dpkg -i rclone-current-linux-amd64.deb && \
@@ -78,7 +79,9 @@ COPY rclone/plex-library-from-master.sh /etc/cont-init.d/47-plex-library-from-ma
 
 COPY rclone/replace-plex-media-scanner.sh /etc/cont-init.d/61-replace-plex-media-scanner
 
-RUN  chmod +x /etc/cont-init.d/* /usr/bin/gdown.pl /usr/bin/plex_media_scanner.sh
+COPY rclone/reconnect-rclone-config.sh /usr/bin/setup-rclone.sh
+
+RUN  chmod +x /etc/cont-init.d/* /usr/bin/gdown.pl /usr/bin/plex_media_scanner.sh /usr/bin/setup-rclone.sh
 
 WORKDIR /data
 ENV XDG_CONFIG_HOME=/config
