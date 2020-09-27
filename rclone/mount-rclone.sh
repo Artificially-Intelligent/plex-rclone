@@ -83,7 +83,6 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		export RCLONE_MOUNT_OPTIONS="$RCLONE_MOUNT_OPTIONS --gid $PGID "
 	fi
 
-	
 	if [ -z "${RCLONE_CONFIG}" ]; then
 		export RCLONE_CONFIG=/config/rclone/rclone.conf
 		echo "note: RCLONE_CONFIG env variable not defined. Assigning default path: $RCLONE_CONFIG"
