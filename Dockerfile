@@ -79,7 +79,7 @@ COPY rclone/plex-library-from-master.sh /etc/cont-init.d/47-plex-library-from-ma
 
 COPY rclone/replace-plex-media-scanner.sh /etc/cont-init.d/61-replace-plex-media-scanner
 
-COPY rclone/print_prefrences.sh /etc/cont-init.d/99-print_plex_prefrences
+# COPY rclone/print_plex_prefrences.sh /etc/cont-init.d/99-print_plex_prefrences
 
 COPY rclone/reconnect-rclone-config.sh /usr/bin/setup-rclone.sh
 
