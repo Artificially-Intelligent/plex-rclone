@@ -87,8 +87,6 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		export RCLONE_CONFIG=/config/rclone/rclone.conf
 		echo "note: RCLONE_CONFIG env variable not defined. Assigning default path: $RCLONE_CONFIG"
 		RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
-		
-
 	fi
 	RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
 	mkdir -p $RCLONE_CONFIG_DIR
@@ -101,7 +99,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		if [ -z $RCLONE_DRIVE_TOKEN ] && [ -f "${RCLONE_CONFIG_DIR}/token.json" ]; then
             export RCLONE_DRIVE_TOKEN=$(cat ${RCLONE_CONFIG_DIR}/token.json)
         fi
-        if [ -z $ RCLONE_DRIVE_TEAM_DRIVE ] && [ -f "${RCLONE_CONFIG_DIR}/team_drive.id" ]; then
+        if [ -z $RCLONE_DRIVE_TEAM_DRIVE ] && [ -f "${RCLONE_CONFIG_DIR}/team_drive.id" ]; then
             export RCLONE_DRIVE_TEAM_DRIVE=$(cat ${RCLONE_CONFIG_DIR}/team_drive.id)
         fi
     fi
@@ -120,7 +118,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 	fi
 
 	# start rclone
-	echo "Starting rclone: rclone $RCLONE_COMMAND"
+	echo "Starting rclone: rclone $RCLONE_COMMAND  $RCLONE_CONFIG_OPTIONS"
 	eval rclone $RCLONE_COMMAND $RCLONE_CONFIG_OPTIONS &
 fi
 
@@ -160,9 +158,9 @@ if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
     fi
 
     # start rclone serve
-    echo "Starting relay server for rclone mount using command: rclone $RCLONE_SERVE_COMMAND"
+    echo "Starting relay server for rclone mount using command: rclone $RCLONE_SERVE_COMMAND $RCLONE_CONFIG_OPTIONS"
     echo "To access open file browser / map network drive to on docker host machine to localhost:$RCLONE_SERVE_PORT . On other machines substitute use <host machine ip address or name>:$RCLONE_SERVE_PORT"
-    rclone $RCLONE_SERVE_COMMAND &
+    eval rclone $RCLONE_SERVE_COMMAND $RCLONE_CONFIG_OPTIONS &
 fi
 
 echo "Connection details"
