@@ -18,7 +18,7 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
         if [ -z $RCLONE_DRIVE_TOKEN ] && [ -f "${RCLONE_CONFIG_DIR}/token.json" ]; then
             export RCLONE_DRIVE_TOKEN=$(cat ${RCLONE_CONFIG_DIR}/token.json)
         fi
-        if [ -z $ RCLONE_DRIVE_TEAM_DRIVE ] && [ -f "${RCLONE_CONFIG_DIR}/team_drive.id" ]; then
+        if [ -z $RCLONE_DRIVE_TEAM_DRIVE ] && [ -f "${RCLONE_CONFIG_DIR}/team_drive.id" ]; then
             export RCLONE_DRIVE_TEAM_DRIVE=$(cat ${RCLONE_CONFIG_DIR}/team_drive.id)
         fi
     fi

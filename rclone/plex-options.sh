@@ -78,3 +78,8 @@ if ! grep -qs "customConnections" "$PREFNAME" && ! [ -z "$ADVERTISE_IP" ]; then
 	echo "ADVERTISE_IP defined, adding customConnections=$ADVERTISE_IP to $PREFNAME"
 	sed -i "s|/>| customConnections=\"${ADVERTISE_IP}\"\/>|g" "${PREFNAME}"
 fi
+
+echo "$PREFNAME contents:"
+echo "__________________________________________________________________________"
+cat $PREFNAME
+echo "__________________________________________________________________________"
