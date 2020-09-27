@@ -60,9 +60,9 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 	fi
 
 	if ! [ -z "${RCLONE_CONFIG_PASS}" ] || ! [ -z "${OP}" ] ; then
-		RCLONE_CONFIG_OPTIONS=" --ask-password "
+		RCLONE_CONFIG_OPTIONS=" --ask-password=false "
 		if [ -z "${RCLONE_CONFIG_PASS}" ] ; then
-			RCLONE_CONFIG_OPTIONS=' --ask-password --password-command "rclone reveal $OP" '
+			RCLONE_CONFIG_OPTIONS=' --ask-password=false --password-command "rclone reveal $OP" '
 		fi
 	fi
 	
@@ -83,12 +83,15 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		export RCLONE_MOUNT_OPTIONS="$RCLONE_MOUNT_OPTIONS --gid $PGID "
 	fi
 
+	
 	if [ -z "${RCLONE_CONFIG}" ]; then
 		export RCLONE_CONFIG=/config/rclone/rclone.conf
 		echo "note: RCLONE_CONFIG env variable not defined. Assigning default path: $RCLONE_CONFIG"
+		mkdir -p ${RCLONE_CONFIG%/*}
+		RCLONE_CONFIG_DIR=/config/rclone
+	else
 		RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
 	fi
-	RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}
 	mkdir -p $RCLONE_CONFIG_DIR
 
     if [ ! -f "${RCLONE_CONFIG}" ]; then
@@ -98,9 +101,11 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		# load values genreated by reconnect-rclone-config.sh if they exist
 		if [ -z $RCLONE_DRIVE_TOKEN ] && [ -f "${RCLONE_CONFIG_DIR}/token.json" ]; then
             export RCLONE_DRIVE_TOKEN=$(cat ${RCLONE_CONFIG_DIR}/token.json)
+			echo "note: Rclone token file $RCLONE_CONFIG_DIR/token.json found, assigning to RCLONE_DRIVE_TOKEN for using in rclone auth."
         fi
         if [ -z $RCLONE_DRIVE_TEAM_DRIVE ] && [ -f "${RCLONE_CONFIG_DIR}/team_drive.id" ]; then
             export RCLONE_DRIVE_TEAM_DRIVE=$(cat ${RCLONE_CONFIG_DIR}/team_drive.id)
+			echo "note: Rclone token file $RCLONE_CONFIG_DIR/team_drive.id found, assigning to RCLONE_DRIVE_TEAM_DRIVE for using in rclone auth."
         fi
     fi
 

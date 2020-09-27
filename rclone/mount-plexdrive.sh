@@ -9,7 +9,7 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
         if [ -z "${RCLONE_CONFIG_PASS}" ] ; then
             export RCLONE_CONFIG_PASS=$(rclone reveal $OP)
         fi
-        RCLONE_CONFIG_EXPORT=$(rclone config show --config /root/.config/rclone/rclone.conf --ask-password )
+        RCLONE_CONFIG_EXPORT=$(rclone config show --config /root/.config/rclone/rclone.conf --ask-password=false )
         export RCLONE_CONFIG_PASS=
     fi
 
