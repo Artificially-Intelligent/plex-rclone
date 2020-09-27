@@ -1,6 +1,9 @@
 #!/usr/bin/with-contenv bash
 
 PREFNAME="$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/Plex Media Server/Preferences.xml"
+if ! [ -f $PREFNAME ] ; then
+	echo "warning: $PREFNAME doesn't exist. Plex options not applied"
+fi
 
 if !  grep -qs "FriendlyName" "$PREFNAME" && ! [ -z "$FriendlyName" ] ; then
 	echo "FriendlyName defined, adding FriendlyName=$FriendlyName to $PREFNAME"
@@ -81,5 +84,5 @@ fi
 
 echo "$PREFNAME contents:"
 echo "__________________________________________________________________________"
-cat $PREFNAME
+cat "$PREFNAME"
 echo "__________________________________________________________________________"
