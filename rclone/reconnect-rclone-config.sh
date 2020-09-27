@@ -33,7 +33,9 @@ while read i; do echo $i; if [ "$i" = $RCLONE_CONFIG ]; then break; fi; done \
 
 RCLONE_CONFIG_EXPORT=$(rclone config show --config $RCLONE_CONFIG)
 echo $RCLONE_CONFIG_EXPORT | grep team_drive | sed -e 's#.*team_drive = \(\)#\1#' | cut -d' ' -f 1 > ${RCLONE_CONFIG_DIR}/team_drive.id
-echo $RCLONE_CONFIG_EXPORT | grep token | sed -e 's#.*token = \(\)#\1#' | cut -d' ' -f 1 > ${RCLONE_CONFIG_DIR}/token.json
+echo $RCLONE_CONFIG_EXPORT | grep token      | sed -e 's#.*token = \(\)#\1#'      | cut -d' ' -f 1 > ${RCLONE_CONFIG_DIR}/token.json
+echo "${RCLONE_CONFIG_DIR}/token.json contents:"
+cat ${RCLONE_CONFIG_DIR}/token.json
 export RCLONE_CONFIG_PASS=
 }
 
