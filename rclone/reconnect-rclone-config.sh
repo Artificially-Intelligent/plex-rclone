@@ -37,13 +37,11 @@ echo $RCLONE_CONFIG_EXPORT | grep token      | sed -e 's#.*token = \(\)#\1#'    
 echo "${RCLONE_CONFIG_DIR}/token.json contents:"
 cat ${RCLONE_CONFIG_DIR}/token.json
 export RCLONE_CONFIG_PASS=
+
+kill 1
 }
 
 parse_config_updates &
 
 rclone config reconnect REMOTE: --config $RCLONE_CONFIG
-
-
-
-
 
