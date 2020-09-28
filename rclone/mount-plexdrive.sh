@@ -78,6 +78,9 @@ if [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEX
         fi
     fi
 
+    if [ -z "${PLEXDRIVE_TOKEN_JSON}" ] && ! [ -z "${RCLONE_DRIVE_TOKEN}" ] ; then
+        PLEXDRIVE_TOKEN_JSON=$RCLONE_DRIVE_TOKEN
+    fi
     if ! [ -z "${PLEXDRIVE_TOKEN_JSON}" ]; then
         echo $PLEXDRIVE_TOKEN_JSON > ${PLEXDRIVE_CONFIG_PATH}token.json
         echo "note: PLEXDRIVE_TOKEN_JSON env variable defined. Replacing ${PLEXDRIVE_CONFIG_PATH}token.json with variable contents"
