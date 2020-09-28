@@ -29,7 +29,7 @@ parse_config_updates(){
 
 # wait for the  config file to be modified
 while read i; do echo $i; if [ "$i" = $RCLONE_CONFIG ]; then break; fi; done \
-   < <(inotifywait -m $RCLONE_CONFIG -e create -e moved_to -e close_write --format '%w' --quiet )
+   < <(inotifywait -m $RCLONE_CONFIG -e create -e moved_to -e close --format '%w' --quiet )
 
 RCLONE_CONFIG_EXPORT=$(rclone config show --config $RCLONE_CONFIG)
 echo $RCLONE_CONFIG_EXPORT | grep team_drive | sed -e 's#.*team_drive = \(\)#\1#' | cut -d' ' -f 1 > ${RCLONE_CONFIG_DIR}/team_drive.id
