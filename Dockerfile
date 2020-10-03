@@ -88,7 +88,7 @@ COPY rclone/reconnect-rclone-config.sh /usr/bin/authenticate
 
 RUN  chmod +x /etc/cont-init.d/* /usr/bin/gdown.pl /usr/bin/plex_media_scanner.sh /usr/bin/authenticate
 
-ADD https://github.com/Artificially-Intelligent/plex-profiles/blob/master/Chromecast.xml /root/.plex/custom_profiles/Chromecast.xml
+ADD https://raw.githubusercontent.com/Artificially-Intelligent/plex-profiles/master/Chromecast.xml /root/.plex/custom_profiles/Chromecast.xml
 
 WORKDIR /data
 ENV XDG_CONFIG_HOME=/config
