@@ -78,12 +78,17 @@ COPY rclone/plex-options.sh /etc/cont-init.d/46-plex-options
 COPY rclone/plex-library-from-master.sh /etc/cont-init.d/47-plex-library-from-master
 
 COPY rclone/replace-plex-media-scanner.sh /etc/cont-init.d/61-replace-plex-media-scanner
+COPY rclone/plex-options.sh /etc/cont-init.d/62-plex-options
 
 # COPY rclone/print_plex_prefrences.sh /etc/cont-init.d/99-print_plex_prefrences
 
 COPY rclone/reconnect-rclone-config.sh /usr/bin/authenticate
 
+
+
 RUN  chmod +x /etc/cont-init.d/* /usr/bin/gdown.pl /usr/bin/plex_media_scanner.sh /usr/bin/authenticate
+
+ADD https://github.com/Artificially-Intelligent/plex-profiles/blob/master/Chromecast.xml /root/.plex/custom_profiles/Chromecast.xml
 
 WORKDIR /data
 ENV XDG_CONFIG_HOME=/config
