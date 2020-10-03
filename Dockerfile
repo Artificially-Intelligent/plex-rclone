@@ -78,7 +78,7 @@ COPY rclone/plex-options.sh /etc/cont-init.d/46-plex-options
 COPY rclone/plex-library-from-master.sh /etc/cont-init.d/47-plex-library-from-master
 
 COPY rclone/replace-plex-media-scanner.sh /etc/cont-init.d/61-replace-plex-media-scanner
-COPY rclone/plex-options.sh /etc/cont-init.d/62-plex-options
+COPY rclone/plex-profiles.sh /etc/cont-init.d/62-plex-profiles
 
 # COPY rclone/print_plex_prefrences.sh /etc/cont-init.d/99-print_plex_prefrences
 
