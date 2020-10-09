@@ -37,7 +37,6 @@ EOT
         echo "$RCLONE_CONFIG_ENCRYPTED" >> $RCLONE_CONFIG
         echo "note: RCLONE_CONFIG_ENCRYPTED env variable defined. Applying overwriting rclone config $RCLONE_CONFIG with encrypted config"
     else
-
         cat << EOT > $RCLONE_CONFIG
 [REMOTE]
 type = drive
@@ -55,9 +54,16 @@ EOT
         fi
         echo "remote = $PLEXDRIVE_MOUNT_CONTAINER_PATH" >> $RCLONE_CONFIG
         
+cat << EOT > $RCLONE_CONFIG
+[PLEXDRIVE_BB_CRYPT]
+type = crypt
+EOT
+        echo "remote = /mnt/plexdrive_bigbuf/" >> $RCLONE_CONFIG
 
         echo "note: generic rclone config file $RCLONE_CONFIG contents:"
         cat $RCLONE_CONFIG
         echo "If you want to replace this with a different file, mount a volume containing a rclong.conf file and/or setup a new rclone.conf by running the command (replacing plex-rclone with your container name if different) ' docker exec -it plex-rclone rclone config --config $RCLONE_CONFIG ' Create a 'new remote' named $RCLONE_MOUNT_REMOTE_PATH  (without the : and any text following it), or add the name you choose followed by : to enviroment variable RCLONE_MOUNT_REMOTE_PATH"
+
     fi
+
 fi
