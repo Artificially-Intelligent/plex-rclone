@@ -38,6 +38,10 @@ echo "${RCLONE_CONFIG_DIR}/token.json contents:"
 cat ${RCLONE_CONFIG_DIR}/token.json
 export RCLONE_CONFIG_PASS=
 
+# remove files if they are empty
+[ -s ${RCLONE_CONFIG_DIR}/team_drive.id ] || rm ${RCLONE_CONFIG_DIR}/team_drive.id
+[ -s ${RCLONE_CONFIG_DIR}/token.json ]    || rm ${RCLONE_CONFIG_DIR}/token.json
+
 kill 1
 }
 

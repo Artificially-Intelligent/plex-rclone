@@ -70,7 +70,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
     if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
         # set default values to use for rclone
 
-        export RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --dir-cache-time 24h --multi-thread-streams=20 $ASSIGN_PUID $ASSIGN_PGID "
+        export RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 0M --timeout 5s --contimeout 5s --dir-cache-time 24h --multi-thread-streams=20  --vfs-read-chunk-size 10k $ASSIGN_PUID $ASSIGN_PGID "
         echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
     fi
 	
@@ -96,7 +96,12 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
     if [ ! -f "${RCLONE_CONFIG}" ]; then
 		GENERIC_RCLONE_CONFIG=/root/.config/rclone/rclone.conf
 		echo "note: Rclone config file $RCLONE_CONFIG doesn't exist, using a generic file $GENERIC_RCLONE_CONFIG instead. Configurations for use with this file need to be configured using environment variables. See https://rclone.org/crypt/ and detailed instructions links at https://rclone.org/docs/ for details."
-		RCLONE_CONFIG=$GENERIC_RCLONE_CONFIG	
+		RCLONE_CONFIG=$GENERIC_RCLONE_CONFIG
+		
+		# remove team_drive.id and token.json files if they are empty
+		[ -s ${RCLONE_CONFIG_DIR}/team_drive.id ] || rm ${RCLONE_CONFIG_DIR}/team_drive.id
+		[ -s ${RCLONE_CONFIG_DIR}/token.json ]    || rm ${RCLONE_CONFIG_DIR}/token.json
+		
 		# load values genreated by reconnect-rclone-config.sh if they exist
 		if [ -z $RCLONE_DRIVE_TOKEN ] && [ -f "${RCLONE_CONFIG_DIR}/token.json" ]; then
             export RCLONE_DRIVE_TOKEN=$(cat ${RCLONE_CONFIG_DIR}/token.json)
