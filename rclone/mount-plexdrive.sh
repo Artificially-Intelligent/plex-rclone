@@ -117,6 +117,10 @@ if ! [[ $PLEXDRIVE_CONFIG_PATH == "/root/.plexdrive/" ]]; then
     ln -s $PLEXDRIVE_CONFIG_PATH /root/.plexdrive
 fi
 
+# remove config.json and token.json files if they are empty
+[ -s ${PLEXDRIVE_CONFIG_PATH}/config.json ] || rm ${PLEXDRIVE_CONFIG_PATH}/config.json
+[ -s ${PLEXDRIVE_CONFIG_PATH}/token.json ]    || rm ${PLEXDRIVE_CONFIG_PATH}/token.json
+
 if [ ! -f "${PLEXDRIVE_CONFIG_PATH}config.json" ]; then
     echo "warning: PLEXDRIVE config file ${PLEXDRIVE_CONFIG_PATH}config.json doesn't exist. Please create one and place in folder mounted to /config/plexdrive"
 fi
@@ -283,6 +287,6 @@ mount_crypt()
 mount_drive
 mount_crypt
 
-mount_drive /mnt/plexdrive_bigbuf 50 /root/.plexdrive/bigbuf_cache.bolt
-mount_crypt /mnt/plexdrive_bigbuf "PLEXDRIVE_BB_CRYPT:" /mnt/plexdrive_bigbuf_decrypted
+# mount_drive /mnt/plexdrive_bigbuf 50 /root/.plexdrive/bigbuf_cache.bolt
+# mount_crypt /mnt/plexdrive_bigbuf "PLEXDRIVE_BB_CRYPT:" /mnt/plexdrive_bigbuf_decrypted
 
