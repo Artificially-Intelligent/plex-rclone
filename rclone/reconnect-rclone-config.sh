@@ -46,6 +46,19 @@ kill 1
 }
 
 parse_config_updates &
+echo 
+echo "********************************* Authentication Instructions ********************************* "
+echo 
+echo "To generate rcloen/plexdrive authenticationb token please do the folowing the steps: "
+echo "1. When asked 'Use auto config?'"
+echo "                        Answer: No"
+echo "2. When to Please go to the following link: "
+echo "                        Action: Cut and paste the URL into a browser an follow the steps until given a verificatiopn code"
+echo "3. When you have the verificaion code in the browser window: "
+echo "                        Action: Copy the code and paste it as the response to prompt 'Enter verification code:'"
+echo "4. When asked 'Change current team drive ID ?' "
+echo "                        Answer: No"
+
 
 rclone config reconnect REMOTE: --config $RCLONE_CONFIG
 

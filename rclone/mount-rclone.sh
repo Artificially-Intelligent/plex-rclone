@@ -70,7 +70,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
     if [ -z "${RCLONE_MOUNT_OPTIONS}" ]; then
         # set default values to use for rclone
 
-        export RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 0M --timeout 5s --contimeout 5s --dir-cache-time 24h --multi-thread-streams=20  --vfs-read-chunk-size 10k $ASSIGN_PUID $ASSIGN_PGID "
+        export RCLONE_MOUNT_OPTIONS=" --read-only --acd-templink-threshold 0 --buffer-size 0M --timeout 5s --contimeout 5s --dir-cache-time 24h --multi-thread-streams=20  --vfs-read-chunk-size 64k $ASSIGN_PUID $ASSIGN_PGID "
         echo "note: RCLONE_MOUNT_OPTIONS env variable not defined. Assigning default options: $RCLONE_MOUNT_OPTIONS"
     fi
 	
@@ -127,7 +127,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 	fi
 
 	# start rclone
-	echo "Starting rclone: rclone $RCLONE_COMMAND  $RCLONE_CONFIG_OPTIONS"
+	echo "Starting rclone: rclone $RCLONE_COMMAND"
 	eval rclone $RCLONE_COMMAND $RCLONE_CONFIG_OPTIONS &
 fi
 
@@ -167,7 +167,7 @@ if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
     fi
 
     # start rclone serve
-    echo "Starting relay server for rclone mount using command: rclone $RCLONE_SERVE_COMMAND $RCLONE_CONFIG_OPTIONS"
+    echo "Starting relay server for rclone mount using command: rclone $RCLONE_SERVE_COMMAND"
     echo "To access open file browser / map network drive to on docker host machine to localhost:$RCLONE_SERVE_PORT . On other machines substitute use <host machine ip address or name>:$RCLONE_SERVE_PORT"
     eval rclone $RCLONE_SERVE_COMMAND $RCLONE_CONFIG_OPTIONS &
 fi
