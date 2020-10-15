@@ -17,7 +17,7 @@ services:
       - "RCLONE_CONFIG=/config/rclone/rclone.conf"
       - "RCLONE_MOUNT_CONTAINER_PATH=/mnt/rclone"
       - "RCLONE_MOUNT_REMOTE_PATH=CRYPT:"
-      - "RCLONE_MOUNT_OPTIONS= --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --dir-cache-time 24h "
+      - "RCLONE_MOUNT_OPTIONS= --read-only --acd-templink-threshold 0 --buffer-size 1G --timeout 5s --contimeout 5s --log-level INFO --stats 60s --dir-cache-time 24h --vfs-read-chunk-size 64k "
       - RCLONE_GUI=TRUE
       - "RCLONE_DRIVE_SCOPE=drive.readonly" # for connection to google drive remote https://rclone.org/drive/ 
       - "RCLONE_DRIVE_TEAM_DRIVE=<your team drive id - can be found in rclone.conf>"
