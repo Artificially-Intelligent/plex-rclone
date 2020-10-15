@@ -74,12 +74,11 @@ COPY rclone/mount-plexdrive.sh /etc/cont-init.d/31-mount-plexdrive
 COPY rclone/mount-rclone.sh /etc/cont-init.d/32-mount-rclone
 COPY rclone/link-to-active-mount.sh /etc/cont-init.d/33-link-to-active-mount
 
-#COPY rclone/plex-options.sh /etc/cont-init.d/43-plex-options
+COPY rclone/plex-options.sh /etc/cont-init.d/43-plex-options
 COPY rclone/plex-library-from-master.sh /etc/cont-init.d/47-plex-library-from-master
 
 COPY rclone/replace-plex-media-scanner.sh /etc/cont-init.d/61-replace-plex-media-scanner
 COPY rclone/plex-profiles.sh /etc/cont-init.d/62-plex-profiles
-COPY rclone/plex-options.sh /etc/cont-init.d/63-plex-options
 
 COPY rclone/print_plex_prefrences.sh /etc/cont-init.d/99-print_plex_prefrences
 
