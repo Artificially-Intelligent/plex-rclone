@@ -1,5 +1,21 @@
 #!/usr/bin/with-contenv bash
 
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -p | --mount-plexdrive )    MOUNT_PLEXDRIVE=TRUE
+                                ;;
+        -c | --mount-crypt )    MOUNT_CRYPT=TRUE
+                                ;;
+        -h | --help )           usage
+                                exit
+                                ;;
+        * )                     usage
+                                exit 1
+    esac
+    shift
+done
+
 echo_and_run() { echo "$*" ; "$@" ; }
 
 if ! [[ $PLEXDRIVE == "TRUE" || $PLEXDRIVE == "true" || $PLEXDRIVE == "1" || $PLEXDRIVE == "True" ]] ; then 
@@ -114,7 +130,7 @@ fi
 
 if ! [[ $PLEXDRIVE_CONFIG_PATH == "/root/.plexdrive/" ]]; then 
     #Link to default plexdrive config path
-    ln -s $PLEXDRIVE_CONFIG_PATH /root/.plexdrive
+    ln -s $PLEXDRIVE_CONFIG_PATH -T /root/.plexdrive
 fi
 
 # remove config.json and token.json files if they are empty
@@ -174,12 +190,13 @@ mount_drive()
     fi
 
     if [ -z "${PLEXDRIVE_COMMAND}" ]; then
-        PLEXDRIVE_COMMAND="mount $PLEXDRIVE_MOUNT_OPTIONS $PLEXDRIVE_TEAM_DRIVE_OPTIONS $PLEXDRIVE_CACHE_OPTIONS $PLEXDRIVE_MOUNT_CONTAINER_PATH"
+        PLEXDRIVE_COMMAND="mount $PLEXDRIVE_MOUNT_OPTIONS $PLEXDRIVE_TEAM_DRIVE_OPTIONS $PLEXDRIVE_CACHE_OPTIONS $PLEXDRIVE_MOUNT_CONTAINER_PATH -c $PLEXDRIVE_CONFIG_PATH "
     fi
     export RCLONE_CONFIG_PASS=
     #start PLEXDRIVE
     echo "Starting PLEXDRIVE: plexdrive $PLEXDRIVE_COMMAND"
-    plexdrive $PLEXDRIVE_COMMAND &
+    fusermount -uz "$PLEXDRIVE_MOUNT_CONTAINER_PATH"
+    plexdrive $PLEXDRIVE_COMMAND
 }
 
     # att=chunk-size
@@ -272,7 +289,7 @@ mount_crypt()
     # export RCLONE_SERVE_PORT=$PLEXDRIVE_RCLONE_SERVE_PORT
     # export RCLONE_SERVE_GUI_PORT=$PLEXDRIVE_RCLONE_SERVE_GUI_PORT
 
-    RCLONE_MOUNT_SCRIPT=`find "/etc/cont-init.d/" -name *mount-rclone*`
+    RCLONE_MOUNT_SCRIPT=/usr/bin/mount-rclone
     RCLONE_MOUNT_SCRIPT_COMMAND="--mount-options '$PLEXDRIVE_RCLONE_MOUNT_OPTIONS' \
     --container-path '$PLEXDRIVE_RCLONE_MOUNT_CONTAINER_PATH' \
     --remote-path '$PLEXDRIVE_RCLONE_MOUNT_REMOTE_PATH' \
@@ -284,8 +301,12 @@ mount_crypt()
     eval $RCLONE_MOUNT_SCRIPT $RCLONE_MOUNT_SCRIPT_COMMAND
 }
 
-mount_drive
-mount_crypt
+if ! [ -z "${MOUNT_PLEXDRIVE}" ] ; then
+    mount_drive
+fi
+if ! [ -z "${MOUNT_CRYPT}" ] ; then
+    mount_crypt
+fi
 
 # mount_drive /mnt/plexdrive_bigbuf 50 /root/.plexdrive/bigbuf_cache.bolt
 # mount_crypt /mnt/plexdrive_bigbuf "PLEXDRIVE_BB_CRYPT:" /mnt/plexdrive_bigbuf_decrypted

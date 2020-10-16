@@ -128,7 +128,12 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 
 	# start rclone
 	echo "Starting rclone: rclone $RCLONE_COMMAND"
-	eval rclone $RCLONE_COMMAND $RCLONE_CONFIG_OPTIONS &
+	fusermount -uz "$RCLONE_MOUNT_CONTAINER_PATH"
+	if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
+    	eval rclone $RCLONE_COMMAND $RCLONE_CONFIG_OPTIONS &
+	else
+    	eval rclone $RCLONE_COMMAND $RCLONE_CONFIG_OPTIONS
+	fi
 fi
 
 # start rclone serve
@@ -169,7 +174,7 @@ if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
     # start rclone serve
     echo "Starting relay server for rclone mount using command: rclone $RCLONE_SERVE_COMMAND"
     echo "To access open file browser / map network drive to on docker host machine to localhost:$RCLONE_SERVE_PORT . On other machines substitute use <host machine ip address or name>:$RCLONE_SERVE_PORT"
-    eval rclone $RCLONE_SERVE_COMMAND $RCLONE_CONFIG_OPTIONS &
+    eval rclone $RCLONE_SERVE_COMMAND $RCLONE_CONFIG_OPTIONS
 fi
 
 echo "Connection details"

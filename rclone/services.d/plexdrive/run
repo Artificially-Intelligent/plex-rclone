@@ -1,0 +1,14 @@
+#!/usr/bin/with-contenv bash
+
+if [ -z "${PLEXDRIVE_CONFIG_PATH}" ]; then
+    PLEXDRIVE_CONFIG_PATH=/config/plexdrive/
+    echo "note: PLEXDRIVE_CONFIG_PATH env variable not defined. Assigning default path: $PLEXDRIVE_CONFIG_PATH"
+fi
+
+# UMASK_SET=${UMASK_SET:-022}
+# umask "$UMASK_SET"
+
+echo "Starting Plexdrive."
+exec \
+        /bin/bash -c \
+        '/usr/bin/mount-plexdrive --mount-plexdrive'
