@@ -1,7 +1,10 @@
 #!/usr/bin/with-contenv bash
 
 if [ -z "${RCLONE_CONFIG}" ]; then
-    export RCLONE_CONFIG=/config/rclone/rclone.conf
+    RCLONE_CONFIG=/config/rclone/rclone.conf
+    if [ ! -f "${RCLONE_CONFIG}" ]; then
+        RCLONE_CONFIG=/root/.config/rclone/rclone.conf
+    fi
     echo "note: RCLONE_CONFIG env variable not defined. Assigning default path: $RCLONE_CONFIG"
 fi
 RCLONE_CONFIG_DIR=${RCLONE_CONFIG%/*}

@@ -1,14 +1,26 @@
 #!/usr/bin/with-contenv bash
 
+if [ -z "${RCLONE_CONFIG}" ]; then
+    export RCLONE_CONFIG=/config/rclone/rclone.conf
+fi
+
 if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
-    #wait a few seconds for mount to be active
+    echo "Testing $PLEX_LIBRARY_MASTER_PATH for bbb"
 
-    [ "$(ls -A $RCLONE_MOUNT_CONTAINER_PATH)" ] || sleep 2
-    [ "$(ls -A $RCLONE_MOUNT_CONTAINER_PATH)" ] || sleep 5
-    [ "$(ls -A $RCLONE_MOUNT_CONTAINER_PATH)" ] || sleep 13
-    [ "$(ls -A $RCLONE_MOUNT_CONTAINER_PATH)" ] || sleep 40
+    export RCLONE_CONFIG_PASS=$(rclone reveal $OP)
+    RCLONE_LS=$(rclone ls "$PLEX_LIBRARY_MASTER_PATH"  --config /root/.config/rclone/rclone.conf --ask-password=false)
+    if echo $RCLONE_LS | grep -q failed ; then
+        echo "rclone ls failed. Testing $PLEX_LIBRARY_MASTER_PATH as local path"
 
-    if [ -f "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
+        #wait a few seconds for mount to be active
+        
+        [ "$(ls -A $RCLONE_MOUNT_CONTAINER_PATH)" ] || sleep 2
+        [ "$(ls -A $RCLONE_MOUNT_CONTAINER_PATH)" ] || sleep 5
+        [ "$(ls -A $RCLONE_MOUNT_CONTAINER_PATH)" ] || sleep 13
+        [ "$(ls -A $RCLONE_MOUNT_CONTAINER_PATH)" ] || sleep 40
+    fi
+
+    if [ -f "${PLEX_LIBRARY_MASTER_PATH}" ] || ! [ -z "${RCLONE_LS}" ] ; then
         PLEX_LIBRARY_MASTER_TAR=`basename $PLEX_LIBRARY_MASTER_PATH`
         echo "note: PLEX_LIBRARY_MASTER_PATH $PLEX_LIBRARY_MASTER_PATH detected. Checking if new version is present"
         if [ -f "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/tag" ]; then
@@ -17,14 +29,21 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
             LIBRARY_VERSION_TAG=1
         fi
 
-        CLOUD_LIBRARY_VERSION_TAG=$(date -d "`stat -c %y "$PLEX_LIBRARY_MASTER_PATH"`" +%s)
-
+        if ! [ -z "${RCLONE_LS}" ] ; then
+            read CLOUD_LIBRARY_VERSION_TAG _ <<< "$RCLONE_LS"
+        else
+            CLOUD_LIBRARY_VERSION_TAG=$(date -d "`stat -c %y "$PLEX_LIBRARY_MASTER_PATH"`" +%s)
+        fi
+        
         if [ $CLOUD_LIBRARY_VERSION_TAG -gt $LIBRARY_VERSION_TAG ]; then
             echo "note: Newer master library version ($CLOUD_LIBRARY_VERSION_TAG) detected. Overwriting library (version: $LIBRARY_VERSION_TAG)"
 
-            cp "$PLEX_LIBRARY_MASTER_PATH" /tmp/
-            # rclone copy $PLEX_LIBRARY_MASTER_PATH /tmp --config $RCLONE_CONFIG --bwlimit 6M
-
+            if ! [ -z "${RCLONE_LS}" ] ; then
+                rclone copy "$PLEX_LIBRARY_MASTER_PATH" /tmp --config "$RCLONE_CONFIG" --bwlimit 6M  --ask-password=false
+            else
+                cp "$PLEX_LIBRARY_MASTER_PATH" /tmp/
+            fi
+            
             mkdir -p /tmp/
             tar -C /tmp/ -zxf "/tmp/$PLEX_LIBRARY_MASTER_TAR"
 
@@ -49,6 +68,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
             echo "note: Master library version ($CLOUD_LIBRARY_VERSION_TAG) matched local version library (version: $LIBRARY_VERSION_TAG)"
         fi
     fi
+    export RCLONE_CONFIG_PASS=
 fi
 
 # check Library permissions

@@ -69,13 +69,11 @@ COPY gdown.pl /usr/bin/gdown.pl
 COPY rclone/plex-media-scanner.sh /usr/bin/plex_media_scanner.sh
 
 # Copy rcone startup script to init.d
-COPY rclone/create-rclone-config.sh /etc/cont-init.d/30-create-rclone-config
-#COPY rclone/mount-plexdrive.sh /etc/cont-init.d/31-mount-plexdrive
-#COPY rclone/mount-rclone.sh /etc/cont-init.d/32-mount-rclone
+COPY rclone/create-rclone-config.sh /etc/cont-init.d/30-create-rclone-confige
 COPY rclone/setup-rclone-folders.sh /etc/cont-init.d/31-setup-rclone-folders
 
 COPY rclone/plex-options.sh /etc/cont-init.d/43-plex-options
-#COPY rclone/plex-library-from-master.sh /etc/cont-init.d/47-plex-library-from-master
+COPY rclone/plex-library-from-master.sh /etc/cont-init.d/47-plex-library-from-master
 
 COPY rclone/replace-plex-media-scanner.sh /etc/cont-init.d/61-replace-plex-media-scanner
 COPY rclone/plex-profiles.sh /etc/cont-init.d/62-plex-profiles
