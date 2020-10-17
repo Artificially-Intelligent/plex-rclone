@@ -7,8 +7,11 @@ fi
 
 # UMASK_SET=${UMASK_SET:-022}
 # umask "$UMASK_SET"
-
+echo ----------------------------------------------------------
+echo ----------------------------------------------------------
 echo "Starting Plexdrive."
+echo ----------------------------------------------------------
+echo
 exec \
         /bin/bash -c \
         '/usr/bin/mount-plexdrive --mount-plexdrive'

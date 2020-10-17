@@ -115,7 +115,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 
 	if [ -z "${RCLONE_MOUNT_REMOTE_PATH}" ]; then
 		export RCLONE_MOUNT_REMOTE_PATH="CRYPT:"
-		echo "warning: RCLONE_MOUNT_REMOTE_PATH env variable not defined. Assigning default value: $RCLONE_MOUNT_REMOTE_PATH"	
+		echo "note: RCLONE_MOUNT_REMOTE_PATH env variable not defined. Assigning default value: $RCLONE_MOUNT_REMOTE_PATH"	
 	fi
 
 	mkdir -p "$RCLONE_MOUNT_CONTAINER_PATH";

@@ -3,7 +3,11 @@
 # UMASK_SET=${UMASK_SET:-022}
 # umask "$UMASK_SET"
 
+echo ----------------------------------------------------------
+echo ----------------------------------------------------------
 echo "Starting Plexdrive Rclone Crypt."
+echo ----------------------------------------------------------
+echo
 exec \
         /bin/bash -c \
         '/usr/bin/mount-plexdrive --mount-crypt'
