@@ -69,8 +69,9 @@ COPY gdown.pl /usr/bin/gdown.pl
 COPY rclone/plex-media-scanner.sh /usr/bin/plex_media_scanner.sh
 
 # Copy rcone startup script to init.d
-COPY rclone/create-rclone-config.sh /etc/cont-init.d/30-create-rclone-confige
-COPY rclone/setup-rclone-folders.sh /etc/cont-init.d/31-setup-rclone-folders
+COPY rclone/create-rclone-config.sh /etc/cont-init.d/30-create-rclone-config
+COPY rclone/create-plexdrive-config.sh /etc/cont-init.d/31-create-plexdrive-config
+COPY rclone/setup-rclone-folders.sh /etc/cont-init.d/32-setup-rclone-folders
 
 COPY rclone/plex-options.sh /etc/cont-init.d/43-plex-options
 COPY rclone/plex-library-from-master.sh /etc/cont-init.d/47-plex-library-from-master
@@ -85,11 +86,9 @@ COPY rclone/mount-plexdrive.sh /usr/bin/mount-plexdrive
 COPY rclone/mount-rclone.sh /usr/bin/mount-rclone
 COPY rclone/link-to-active-mount.sh /usr/bin/link-to-active-mount
 
-ADD rclone/services.d/plexdrive /etc/services.d/plexdrive
-ADD rclone/services.d/plexdrive_decrypted /etc/services.d/plexdrive_decrypted
-ADD rclone/services.d/rclone /etc/services.d/rclone
+ADD rclone/services.d /etc/services.d.inactive
 
-RUN  chmod -R +x /etc/cont-init.d/* /etc/services.d/* /usr/bin/gdown.pl /usr/bin/plex_media_scanner.sh /usr/bin/authenticate /usr/bin/mount-plexdrive /usr/bin/mount-rclone /usr/bin/link-to-active-mount
+RUN  chmod -R +x /etc/cont-init.d/* /etc/services.d.inactive/* /usr/bin/gdown.pl /usr/bin/plex_media_scanner.sh /usr/bin/authenticate /usr/bin/mount-plexdrive /usr/bin/mount-rclone /usr/bin/link-to-active-mount
 
 ADD https://raw.githubusercontent.com/Artificially-Intelligent/plex-profiles/master/Chromecast.xml /root/.plex/custom_profiles/Chromecast.xml
 

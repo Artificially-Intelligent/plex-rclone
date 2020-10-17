@@ -70,3 +70,5 @@ EOT
     fi
 
 fi
+
+cp -r /etc/services.d.inactive/rclone /etc/services.d

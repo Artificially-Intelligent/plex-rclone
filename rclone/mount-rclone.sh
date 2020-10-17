@@ -99,8 +99,8 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		RCLONE_CONFIG=$GENERIC_RCLONE_CONFIG
 		
 		# remove team_drive.id and token.json files if they are empty
-		[ -s ${RCLONE_CONFIG_DIR}/team_drive.id ] || rm ${RCLONE_CONFIG_DIR}/team_drive.id
-		[ -s ${RCLONE_CONFIG_DIR}/token.json ]    || rm ${RCLONE_CONFIG_DIR}/token.json
+		[ -s ${RCLONE_CONFIG_DIR}/team_drive.id ] || [ -f ${RCLONE_CONFIG_DIR}/team_drive.id ] && rm ${RCLONE_CONFIG_DIR}/team_drive.id
+		[ -s ${RCLONE_CONFIG_DIR}/token.json ]    || [ -f ${RCLONE_CONFIG_DIR}/token.json ]    && rm ${RCLONE_CONFIG_DIR}/token.json
 		
 		# load values genreated by reconnect-rclone-config.sh if they exist
 		if [ -z $RCLONE_DRIVE_TOKEN ] && [ -f "${RCLONE_CONFIG_DIR}/token.json" ]; then
@@ -128,7 +128,7 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 
 	# start rclone
 	echo "Starting rclone: rclone $RCLONE_COMMAND"
-	fusermount -uz "$RCLONE_MOUNT_CONTAINER_PATH"
+	! [ -z "${RCLONE_MOUNT_CONTAINER_PATH}" ] && $(mount | grep -q "${RCLONE_MOUNT_CONTAINER_PATH}") && echo "unmounting ${RCLONE_MOUNT_CONTAINER_PATH}" && fusermount -uz "$RCLONE_MOUNT_CONTAINER_PATH" 
 	if ! [ -z "${RCLONE_SERVE_PORT}" ]; then
     	eval rclone $RCLONE_COMMAND $RCLONE_CONFIG_OPTIONS &
 	else
