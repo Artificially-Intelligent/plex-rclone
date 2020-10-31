@@ -37,6 +37,7 @@ RUN \
   xdg-utils \
   #nfs server
   nfs-kernel-server \
+  xmlstarlet \ 
   && \
   echo "user_allow_other" >> /etc/fuse.conf 
  

@@ -1,7 +1,10 @@
 #!/usr/bin/with-contenv bash
 
 if [ -z "${RCLONE_CONFIG}" ]; then
-    export RCLONE_CONFIG=/config/rclone/rclone.conf
+    RCLONE_CONFIG=/config/rclone/rclone.conf
+    if [ ! -f "${RCLONE_CONFIG}" ]; then
+        RCLONE_CONFIG=/root/.config/rclone/rclone.conf
+    fi
 fi
 
 if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
@@ -74,8 +77,8 @@ fi
 # check Library permissions
 PUID=${PUID:-911}
 if [ ! "$(stat -c %u "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR")" = "$PUID" ]; then
-        echo "Change in ownership detected, please be patient while we chown existing files"
-        echo "This could take some time"
-        chown abc:abc -R \
-        "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
+    echo "Change in ownership detected, please be patient while we chown existing files"
+    echo "This could take some time"
+    chown abc:abc -R \
+    "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
 fi

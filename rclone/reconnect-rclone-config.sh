@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# if -check flag set run check to see if its needed before reauthenticating
+[ -z $1 ] || [ $1 != -check ] || ( [ "$(ls -A $MEDIA_MOUNT_CONTAINER_PATH)"  ] || [ "$(ls -A /plex/media/)" ] ) && echo "already authenticated" && exit 0
+
 if [ -z "${RCLONE_CONFIG}" ]; then
     export RCLONE_CONFIG=/config/rclone/rclone.conf
     echo "note: RCLONE_CONFIG env variable not defined. Assigning default path: $RCLONE_CONFIG"

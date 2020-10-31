@@ -3,11 +3,20 @@
 # UMASK_SET=${UMASK_SET:-022}
 # umask "$UMASK_SET"
 
+if [ -z "${PLEXDRIVE_MOUNT_CONTAINER_PATH}" ]; then
+    PLEXDRIVE_MOUNT_CONTAINER_PATH=/mnt/plexdrive
+fi
+
 echo ----------------------------------------------------------
 echo ----------------------------------------------------------
 echo "Starting Plexdrive Rclone Crypt."
 echo ----------------------------------------------------------
 echo
-exec \
-        /bin/bash -c \
-        '/usr/bin/mount-plexdrive --mount-crypt'
+if [ "$(ls -A $PLEXDRIVE_MOUNT_CONTAINER_PATH)" ] ; then
+    exec \
+            /bin/bash -c \
+            '/usr/bin/mount-plexdrive --mount-crypt'
+else
+    echo "Plexdrive not mounted yet. sleeping 30."
+    sleep 30
+fi
