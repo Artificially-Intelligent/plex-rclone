@@ -15,3 +15,6 @@ echo
 exec \
         /bin/bash -c \
         '/usr/bin/mount-plexdrive --mount-plexdrive'
+
+# delay between retries if failing to mount
+sleep 5

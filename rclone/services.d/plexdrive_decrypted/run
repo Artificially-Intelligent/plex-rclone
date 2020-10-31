@@ -20,3 +20,6 @@ else
     echo "Plexdrive not mounted yet. sleeping 30."
     sleep 30
 fi
+
+# delay between retries if failing to mount
+sleep 5

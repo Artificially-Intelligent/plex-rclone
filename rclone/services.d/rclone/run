@@ -11,3 +11,6 @@ echo
 exec \
         /bin/bash -c \
         '/usr/bin/mount-rclone'
+
+# delay between retries if failing to mount
+sleep 5
