@@ -8,7 +8,7 @@ if [ -z "${RCLONE_CONFIG}" ]; then
 fi
 
 if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
-    echo "Testing $PLEX_LIBRARY_MASTER_PATH for bbb"
+    echo "Testing $PLEX_LIBRARY_MASTER_PATH for new plex library version"
 
     export RCLONE_CONFIG_PASS=$(rclone reveal $OP)
     RCLONE_LS=$(rclone ls "$PLEX_LIBRARY_MASTER_PATH"  --config /root/.config/rclone/rclone.conf --ask-password=false)
@@ -42,7 +42,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
             echo "note: Newer master library version ($CLOUD_LIBRARY_VERSION_TAG) detected. Overwriting library (version: $LIBRARY_VERSION_TAG)"
 
             if ! [ -z "${RCLONE_LS}" ] ; then
-                rclone copy "$PLEX_LIBRARY_MASTER_PATH" /tmp --config "$RCLONE_CONFIG" --bwlimit 6M  --ask-password=false
+                rclone copy "$PLEX_LIBRARY_MASTER_PATH" /tmp --config "$RCLONE_CONFIG" --bwlimit 6M --progress --ask-password=false
             else
                 cp "$PLEX_LIBRARY_MASTER_PATH" /tmp/
             fi
