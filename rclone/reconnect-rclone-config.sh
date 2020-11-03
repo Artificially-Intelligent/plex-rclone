@@ -45,7 +45,8 @@ export RCLONE_CONFIG_PASS=
 [ -s ${RCLONE_CONFIG_DIR}/team_drive.id ] || rm ${RCLONE_CONFIG_DIR}/team_drive.id
 [ -s ${RCLONE_CONFIG_DIR}/token.json ]    || rm ${RCLONE_CONFIG_DIR}/token.json
 
-kill 1
+( [ -s ${RCLONE_CONFIG_DIR}/team_drive.id ]  && [ -s ${RCLONE_CONFIG_DIR}/team_drive.id ] && kill 1  ) || ( echo "Authentication failed. Retrying" && $@ )
+
 }
 
 parse_config_updates &
