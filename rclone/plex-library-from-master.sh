@@ -42,13 +42,13 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
             echo "note: Newer master library version ($CLOUD_LIBRARY_VERSION_TAG) detected. Overwriting library (version: $LIBRARY_VERSION_TAG)"
 
             if ! [ -z "${RCLONE_LS}" ] ; then
-                rclone copy "$PLEX_LIBRARY_MASTER_PATH" /tmp --config "$RCLONE_CONFIG" --bwlimit 6M --progress --ask-password=false
+                rclone copy "$PLEX_LIBRARY_MASTER_PATH" /config --config "$RCLONE_CONFIG" --bwlimit 6M --progress --ask-password=false
             else
-                cp "$PLEX_LIBRARY_MASTER_PATH" /tmp/
+                cp "$PLEX_LIBRARY_MASTER_PATH" /config/
             fi
             
             mkdir -p /tmp/
-            tar -C /tmp/ -zxf "/tmp/$PLEX_LIBRARY_MASTER_TAR"
+            tar -C /tmp/ -zxf "/config/$PLEX_LIBRARY_MASTER_TAR"
 
             echo "note: $PLEX_LIBRARY_MASTER_TAR untar to /tmp complete"
 
@@ -65,7 +65,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
                 echo "-----------------------------------------------------------------"
                 echo "-----------------------------------------------------------------"
             fi
-            rm -f  "/tmp/$PLEX_LIBRARY_MASTER_TAR"
+            rm -f  "/config/$PLEX_LIBRARY_MASTER_TAR"
             rm -rf /tmp/Library
         else
             echo "note: Master library version ($CLOUD_LIBRARY_VERSION_TAG) matched local version library (version: $LIBRARY_VERSION_TAG)"
