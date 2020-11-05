@@ -42,7 +42,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
             echo "note: Newer master library version ($CLOUD_LIBRARY_VERSION_TAG) detected. Overwriting library (version: $LIBRARY_VERSION_TAG)"
 
             if ! [ -z "${RCLONE_LS}" ] ; then
-                rclone copy "$PLEX_LIBRARY_MASTER_PATH" /config --config "$RCLONE_CONFIG" --bwlimit 6M --progress --stats 30s --retries 100 --ask-password=false
+                rclone copy "$PLEX_LIBRARY_MASTER_PATH" /config --config "$RCLONE_CONFIG" --bwlimit 6M --progress --stats 30s --retries 10 --ask-password=false
             else
                 cp "$PLEX_LIBRARY_MASTER_PATH" /config/
             fi
