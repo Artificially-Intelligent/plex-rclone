@@ -47,18 +47,22 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
                 cp "$PLEX_LIBRARY_MASTER_PATH" /config/
             fi
             
-            mkdir -p /tmp/
-            tar -C /tmp/ -zxf "/config/$PLEX_LIBRARY_MASTER_TAR"
+            echo "Library TAR ("$PLEX_LIBRARY_MASTER_PATH") download complete"
 
-            echo "note: $PLEX_LIBRARY_MASTER_TAR untar to /tmp complete"
+            mkdir -p /config/tmp/
+            tar -C /config/tmp/ -zxf "/config/$PLEX_LIBRARY_MASTER_TAR"
+
+            TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=$(find /config/tmp -name "Application Support")
+
+            echo "note: $PLEX_LIBRARY_MASTER_TAR untar to /config/tmp complete"
 
             if [ $? -eq 0 ] ; then
-                mv  "/tmp/Library/Application Support/Plex Media Server/Preferences.xml" "/tmp/Library/Application Support/Plex Media Server/Preferences-master.xml"
-                cp  "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/Plex Media Server/Preferences.xml" "/tmp/Library/Application Support/Plex Media Server/Preferences.xml"
-                chown -R abc:abc /tmp/Library
-                rm -r "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
-                mv "/tmp/Library/Application Support" "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR"
-                echo "$CLOUD_LIBRARY_VERSION_TAG" > "$PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR/tag"
+                mv  "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/Preferences.xml" "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/Preferences-master.xml"
+                cp  "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/Preferences.xml" "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/Preferences.xml"
+                chown -R abc:abc "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/.."
+                rm -r "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}"
+                mv "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}" "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}"
+                echo "$CLOUD_LIBRARY_VERSION_TAG" > "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/tag"
                 echo "-----------------------------------------------------------------"
                 echo "-----------------------------------------------------------------"
                 echo "------------------- library replacement done! -------------------"
@@ -66,7 +70,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
                 echo "-----------------------------------------------------------------"
             fi
             rm -f  "/config/$PLEX_LIBRARY_MASTER_TAR"
-            rm -rf /tmp/Library
+            rm -rf /config/tmp/
         else
             echo "note: Master library version ($CLOUD_LIBRARY_VERSION_TAG) matched local version library (version: $LIBRARY_VERSION_TAG)"
         fi
