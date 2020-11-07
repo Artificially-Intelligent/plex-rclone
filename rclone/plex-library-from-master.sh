@@ -41,36 +41,49 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
         if [ $CLOUD_LIBRARY_VERSION_TAG -gt $LIBRARY_VERSION_TAG ]; then
             echo "note: Newer master library version ($CLOUD_LIBRARY_VERSION_TAG) detected. Overwriting library (version: $LIBRARY_VERSION_TAG)"
 
+            TEMP_PARENT=/config/tmp
+            mkdir -p $TEMP_PARENT
+
             if ! [ -z "${RCLONE_LS}" ] ; then
-                rclone sync "$PLEX_LIBRARY_MASTER_PATH" /config --config "$RCLONE_CONFIG" --bwlimit 6M --progress --stats 30s --retries 10 --ask-password=false
+                rclone sync "$PLEX_LIBRARY_MASTER_PATH" $TEMP_PARENT --config "$RCLONE_CONFIG" --bwlimit 6M --progress --stats 30s --retries 10 --ask-password=false
+                COPY_RESULT=$?
             else
-                cp "$PLEX_LIBRARY_MASTER_PATH" /config/
+                cp "$PLEX_LIBRARY_MASTER_PATH" $TEMP_PARENT/
+                COPY_RESULT=$?
             fi
-            
-            echo "Library TAR ("$PLEX_LIBRARY_MASTER_PATH") download complete"
 
-            mkdir -p /config/tmp/
-            tar -C /config/tmp/ -zxf "/config/$PLEX_LIBRARY_MASTER_TAR"
+            if [ $COPY_RESULT -ne 0 ] ; then
+                echo "error: $PLEX_LIBRARY_MASTER_PATH download failed"
+            else
+                echo "note: $PLEX_LIBRARY_MASTER_TAR download to $TEMP_PARENT complete"
 
-            TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=$(find /config/tmp -name "Application Support")
+                tar -C $TEMP_PARENT/tar/ -zxf "$TEMP_PARENT/$PLEX_LIBRARY_MASTER_TAR"
 
-            echo "note: $PLEX_LIBRARY_MASTER_TAR untar to /config/tmp complete"
+                if [ $? -ne 0 ] ; then
+                    echo "error: $PLEX_LIBRARY_MASTER_TAR untar to $TEMP_PARENT/tar failed"
+                    rm -rf $TEMP_PARENT/tar
+                else
+                    echo "note: $PLEX_LIBRARY_MASTER_TAR untar to $TEMP_PARENT/tar complete"
 
-            if [ $? -eq 0 ] ; then
-                mv  "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/Preferences.xml" "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/Preferences-master.xml"
-                cp  "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/Preferences.xml" "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/Preferences.xml"
-                chown -R abc:abc "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/.."
-                rm -r "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}"
-                mv "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}" "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}"
-                echo "$CLOUD_LIBRARY_VERSION_TAG" > "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/tag"
-                echo "-----------------------------------------------------------------"
-                echo "-----------------------------------------------------------------"
-                echo "------------------- library replacement done! -------------------"
-                echo "-----------------------------------------------------------------"
-                echo "-----------------------------------------------------------------"
+                    TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=$(find $TEMP_PARENT/tar -name "Application Support")
+
+                    mv  "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/Preferences.xml" "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/Preferences-master.xml"
+                    cp  "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/Preferences.xml" "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/Plex Media Server/Preferences.xml"
+                    chown -R abc:abc "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/.."
+                    rm -r "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}"
+                    mv "${TEMP_PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}" "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}"
+
+                    # rm -f  "$TEMP_PARENT/$PLEX_LIBRARY_MASTER_TAR"
+                    rm -rf "$TEMP_PARENT"
+                    echo "$CLOUD_LIBRARY_VERSION_TAG" > "${PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR}/tag"
+                    
+                    echo "-----------------------------------------------------------------"
+                    echo "-----------------------------------------------------------------"
+                    echo "------------------- library replacement done! -------------------"
+                    echo "-----------------------------------------------------------------"
+                    echo "-----------------------------------------------------------------"
+                fi
             fi
-            rm -f  "/config/$PLEX_LIBRARY_MASTER_TAR"
-            rm -rf /config/tmp/
         else
             echo "note: Master library version ($CLOUD_LIBRARY_VERSION_TAG) matched local version library (version: $LIBRARY_VERSION_TAG)"
         fi
