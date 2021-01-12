@@ -56,7 +56,7 @@ if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
                 echo "error: $PLEX_LIBRARY_MASTER_PATH download failed"
             else
                 echo "note: $PLEX_LIBRARY_MASTER_TAR download to $TEMP_PARENT complete"
-
+                mkdir -p $TEMP_PARENT/tar
                 tar -C $TEMP_PARENT/tar/ -zxf "$TEMP_PARENT/$PLEX_LIBRARY_MASTER_TAR"
 
                 if [ $? -ne 0 ] ; then
