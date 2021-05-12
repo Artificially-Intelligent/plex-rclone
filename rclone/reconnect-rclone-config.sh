@@ -15,6 +15,9 @@ if [ ! -f "${RCLONE_CONFIG}" ]; then
     RCLONE_CONFIG=/root/.config/rclone/rclone.conf
 fi
 
+RCLONE_CONFIG_BAK=$RCLONE_CONFIG
+export RCLONE_CONFIG=/tmp/rclone.conf # junk config location so rclone reveal works
+
 if ! [ -z "${RCLONE_CONFIG_PASS}" ] || ! [ -z "${OP}" ] ; then
     if [ -z "${RCLONE_CONFIG_PASS}" ] ; then
         export RCLONE_CONFIG_PASS=$(rclone reveal $OP)
@@ -27,6 +30,7 @@ if [ -z "${RCLONE_CONFIG_PASS}" ] && ! [ -z "${OP}" ] ; then
     RCLONE_CONFIG_EXPORT=$(rclone config show --config /root/.config/rclone/rclone.conf)
 fi
 
+export RCLONE_CONFIG=$RCLONE_CONFIG_BAK
 
 parse_config_updates(){
 
