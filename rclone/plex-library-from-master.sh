@@ -10,7 +10,11 @@ fi
 if ! [ -z "${PLEX_LIBRARY_MASTER_PATH}" ] ; then
     echo "Testing $PLEX_LIBRARY_MASTER_PATH for new plex library version"
 
-    export RCLONE_CONFIG_PASS=$(rclone reveal $OP)
+	RCLONE_CONFIG_BAK=$RCLONE_CONFIG
+	RCLONE_CONFIG=/tmp/rclone.conf
+	export RCLONE_CONFIG_PASS=$(rclone reveal $OP)
+	RCLONE_CONFIG=$RCLONE_CONFIG_BAK
+    
     RCLONE_LS=$(rclone ls "$PLEX_LIBRARY_MASTER_PATH"  --config /root/.config/rclone/rclone.conf --ask-password=false)
     if echo $RCLONE_LS | grep -q failed ; then
         echo "rclone ls failed. Testing $PLEX_LIBRARY_MASTER_PATH as local path"

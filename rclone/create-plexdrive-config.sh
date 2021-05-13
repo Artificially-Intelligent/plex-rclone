@@ -11,7 +11,10 @@ fi
 
 if ! [ -z "${RCLONE_CONFIG_PASS}" ] || ! [ -z "${OP}" ] ; then
     if [ -z "${RCLONE_CONFIG_PASS}" ] ; then
-        export RCLONE_CONFIG_PASS=$(rclone reveal $OP)
+		RCLONE_CONFIG_BAK=$RCLONE_CONFIG
+		RCLONE_CONFIG=/tmp/rclone.conf
+		export RCLONE_CONFIG_PASS=$(rclone reveal $OP)
+		RCLONE_CONFIG=$RCLONE_CONFIG_BAK
     fi
     RCLONE_CONFIG_EXPORT=$(rclone config show --config /root/.config/rclone/rclone.conf --ask-password=false )
     export RCLONE_CONFIG_PASS=
