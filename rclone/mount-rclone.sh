@@ -62,7 +62,10 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 	if ! [ -z "${RCLONE_CONFIG_PASS}" ] || ! [ -z "${OP}" ] ; then
 		RCLONE_CONFIG_OPTIONS=" --ask-password=false "
 		if [ -z "${RCLONE_CONFIG_PASS}" ] ; then
-			RCLONE_CONFIG_OPTIONS=' --ask-password=false --password-command "rclone reveal $OP" '
+			RCLONE_CONFIG_BAK=$RCLONE_CONFIG
+			RCLONE_CONFIG=/tmp/rclone.conf
+			export RCLONE_CONFIG_PASS=$(rclone reveal $OP)
+			RCLONE_CONFIG=$RCLONE_CONFIG_BAK
 		fi
 	fi
 	

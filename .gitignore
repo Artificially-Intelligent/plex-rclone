@@ -1,2 +1,6 @@
 install-scripts/docker-compose.yaml
 install-scripts/install-plex-rclone.ps1
+.vs/*
+.vs/slnx.sqlite
+.vs/ProjectSettings.json
+install-scripts/install-plex-rclone-v2.ps1
