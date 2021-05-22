@@ -102,8 +102,8 @@ if ! [[ $RCLONE == "FALSE" || $RCLONE == "false" || $RCLONE == "0" || $RCLONE ==
 		RCLONE_CONFIG=$GENERIC_RCLONE_CONFIG
 		
 		# remove team_drive.id and token.json files if they are empty
-		[ -s ${RCLONE_CONFIG_DIR}/team_drive.id ] || [ -f ${RCLONE_CONFIG_DIR}/team_drive.id ] && rm ${RCLONE_CONFIG_DIR}/team_drive.id
-		[ -s ${RCLONE_CONFIG_DIR}/token.json ]    || [ -f ${RCLONE_CONFIG_DIR}/token.json ]    && rm ${RCLONE_CONFIG_DIR}/token.json
+		[ -s ${RCLONE_CONFIG_DIR}/team_drive.id ] || ( [ -f ${RCLONE_CONFIG_DIR}/team_drive.id ] && mv ${RCLONE_CONFIG_DIR}/team_drive.id  ${RCLONE_CONFIG_DIR}/team_drive.id.bak )
+		[ -s ${RCLONE_CONFIG_DIR}/token.json ]       || ( [ -f ${RCLONE_CONFIG_DIR}/token.json ]       && mv ${RCLONE_CONFIG_DIR}/token.json  ${RCLONE_CONFIG_DIR}/token.json.bak )
 		
 		# load values genreated by reconnect-rclone-config.sh if they exist
 		if [ -z $RCLONE_DRIVE_TOKEN ] && [ -f "${RCLONE_CONFIG_DIR}/token.json" ]; then
