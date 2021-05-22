@@ -83,13 +83,14 @@ COPY rclone/plex-profiles.sh /etc/cont-init.d/62-plex-profiles
 COPY rclone/print_plex_prefrences.sh /etc/cont-init.d/99-print_plex_prefrences
 
 COPY rclone/reconnect-rclone-config.sh /usr/bin/authenticate
+COPY rclone/remove-auth.sh /usr/bin/remove-auth
 COPY rclone/mount-plexdrive.sh /usr/bin/mount-plexdrive
 COPY rclone/mount-rclone.sh /usr/bin/mount-rclone
 COPY rclone/link-to-active-mount.sh /usr/bin/link-to-active-mount
 
 ADD rclone/services.d /etc/services.d.inactive
 
-RUN  chmod -R +x /etc/cont-init.d/* /etc/services.d.inactive/* /usr/bin/gdown.pl /usr/bin/plex_media_scanner.sh /usr/bin/authenticate /usr/bin/mount-plexdrive /usr/bin/mount-rclone /usr/bin/link-to-active-mount
+RUN  chmod -R +x /etc/cont-init.d/* /etc/services.d.inactive/* /usr/bin/gdown.pl /usr/bin/plex_media_scanner.sh /usr/bin/authenticate /usr/bin/mount-plexdrive /usr/bin/mount-rclone /usr/bin/link-to-active-mount /usr/bin/remove-auth
 
 ADD https://raw.githubusercontent.com/Artificially-Intelligent/plex-profiles/master/Chromecast.xml /root/.plex/custom_profiles/Chromecast.xml
 
